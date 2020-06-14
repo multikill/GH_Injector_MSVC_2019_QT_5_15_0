@@ -30,6 +30,10 @@
 		3. x64_static -> qt-5.15.0-static-msvc2019-x86_64
 	3. Restart MSVC to repair intellisense
 	4. Build project
+6. GH Injector-Library
+	1. Download https://github.com/Broihon/GH-Injector-Library
+	2. Change C++ Language to std:c++17
+	3. Build and Copy to Project Folder
 
 ## Feature:
 - intelligent drag and drop

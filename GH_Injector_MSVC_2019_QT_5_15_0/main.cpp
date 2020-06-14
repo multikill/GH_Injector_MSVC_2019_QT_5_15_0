@@ -19,7 +19,7 @@ char* argument_value3[]{ "val1", "-f", "C:\\temp\\HelloWorld_x64.dll", "-p", "no
 int main(int argc, char* argv[]) {
 
 #ifdef DEBUG_CMD_ARG
-	int res = CmdArg(ARRAYSIZE(argument_value3), argument_value3);
+	int res = CmdArg(ARRAYSIZE(argument_value1), argument_value1);
 
 #else	
 	int res = CmdArg(argc, argv);
@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
 
 	//InjectionLib inj;
 	//inj.Init();
-   // std::vector<std::string> l;
+    //std::vector<std::string> l;
 	//l.push_back({});
 	//l.reserve(10);
 

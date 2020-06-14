@@ -12,6 +12,7 @@
 #include <urlmon.h>
 #include <fstream>
 #include <string>
+#include <sstream>
 
 #include <string>
 #include "Banner.h"
@@ -19,6 +20,7 @@
 #include "Injection.h"
 #include "Compress.h"
 #include "Zip.h"
+#include "ShortCut.h"
 
 int const GuiMain::EXIT_CODE_REBOOT = -123456789;
 
@@ -154,6 +156,7 @@ GuiMain::GuiMain(QWidget* parent)
 	platformCheck();
 
 	bool status = SetDebugPrivilege(true);
+
 	int i = 42;
 }
 
@@ -1088,7 +1091,179 @@ void GuiMain::open_help()
 
 void GuiMain::open_log()
 {
-	bool ok = QDesktopServices::openUrl(QUrl(GH_LOG_URL, QUrl::TolerantMode));
+	//bool ok = QDesktopServices::openUrl(QUrl(GH_LOG_URL, QUrl::TolerantMode));
+
+	std::string shortCut;
+	QString fileName = "Injector_";
+
+	int fileType = NONE;
+	int processType = NONE;
+
+	// Process ID
+	if (ui.rb_pid->isChecked())
+	{
+		int id = ui.txt_pid->text().toInt();
+		if (id)
+		{
+			Process_Struct ps_local =  getProcessByPID(id);
+			shortCut += " -p " + std::string(ps_local.name);
+			fileName += ps_local.name;
+			processType = ps_local.arch;
+		}
+		else
+		{
+			emit injec_status(false, "Invalid PID");
+			return;
+		}
+	}
+	else // Process Name
+	{
+
+		int index = ui.cmb_proc->currentIndex();
+		Process_Struct p = getProcessByName(ui.cmb_proc->itemText(index).toStdString().c_str());
+		if (p.pid)
+		{
+			shortCut += " -p " + std::string(p.name);
+			fileName += p.name;
+			processType = p.arch;
+		}
+		else
+		{
+			emit injec_status(false, "Invalid Process Name");
+			return;
+		}
+	}
+
+	int fileFound = 0;
+	for (QTreeWidgetItemIterator it(ui.tree_files); (*it) != nullptr; ++it)
+	{
+		if (fileFound)
+			break;
+
+		// Find Item
+		if ((*it)->text(0) != "YES")
+			continue;
+
+		// Convert String
+		QString fileStr = (*it)->text(2);
+
+		fileName += QString("_") + (*it)->text(1);
+
+
+		// Check Existens
+		QFile qf(fileStr);
+		if (!qf.exists())
+		{
+			emit injec_status(false, "File not found");
+			return;
+		}
+
+		// Check Architecture
+		fileType = str_to_arch((*it)->text(3));
+		if (fileType == NONE)
+		{
+			emit injec_status(false, "File Architecture invalid");
+			return;
+		}
+
+		// Check File Selected
+		if (processType == NONE)
+		{
+			emit injec_status(false, "File not selected");
+			return;
+		}
+
+		if (processType != fileType || processType == NULL || fileType == NULL)
+		{
+			emit injec_status(false, "File and Process are incompatible");
+			return;
+		}
+
+		shortCut += " -f " + fileStr.toStdString();
+		fileFound++;
+	}
+
+	if(fileFound == 0)
+	{
+		emit injec_status(false, "No file selected");
+		return;
+	}
+
+	int delay = ui.txt_delay->text().toInt();
+	if (delay > 0)
+	{
+		shortCut += " -delay " + delay;
+	}
+
+	// We need a own checkbox for this
+
+	//int wait = ui.cb_auto->isChecked();
+	//if (wait)
+	//{
+	//	shortCut += " -wait";
+	//}
+
+
+	switch (ui.cmb_load->currentIndex())
+	{
+	case 1:  shortCut += " -load ldr";			break;
+	case 2:  shortCut += " -load ldrp";			break;
+	case 3:  shortCut += " -load manuel";		break;
+	default: /*shortCut += " -load loadlib"*/;	break;
+	}
+
+	switch (ui.cmb_create->currentIndex())
+	{
+	case 1:  shortCut += " -start hijack";		break;
+	case 2:  shortCut += " -start hook";		break;
+	case 3:  shortCut += " -start apc";			break;
+	default: /*shortCut += " -start create";*/	break;
+	}
+
+
+	if (ui.cmb_peh->currentIndex() == 1)	shortCut += " -peh erase";
+	if (ui.cmb_peh->currentIndex() == 2)	shortCut += " -peh fake";
+	if (ui.cb_unlink->isChecked())			shortCut += " -unlink";
+	if (ui.cb_clock->isChecked())			shortCut += " -cloak";
+	if (ui.cb_random->isChecked())			shortCut += " -randomize";
+	if (ui.cb_copy->isChecked())			shortCut += " -copy";
+	if (ui.cb_hijack->isChecked())			shortCut += " -hijack";
+
+	DWORD Flags = 0;
+	if (ui.cmb_load->currentIndex() == 3)
+	{
+		if (ui.cb_shift->isChecked())		Flags |= INJ_MM_SHIFT_MODULE;
+		if (ui.cb_clean->isChecked())		Flags |= INJ_MM_CLEAN_DATA_DIR;
+		if (ui.cb_imports->isChecked())		Flags |= INJ_MM_RESOLVE_IMPORTS;
+		if (ui.cb_delay->isChecked())		Flags |= INJ_MM_RESOLVE_DELAY_IMPORTS;
+		if (ui.cb_tls->isChecked())			Flags |= INJ_MM_EXECUTE_TLS;
+		if (ui.cb_seh->isChecked())			Flags |= INJ_MM_ENABLE_SEH;
+		if (ui.cb_protection->isChecked())	Flags |= INJ_MM_SET_PAGE_PROTECTIONS;
+		if (ui.cb_main->isChecked())		Flags |= INJ_MM_RUN_DLL_MAIN;
+
+		// ToDo:: Set Security Cookie ???
+
+		std::stringstream stream;
+		stream << "0x" << std::hex << Flags;
+		shortCut += " -mapping " + stream.str();
+	}
+
+	fileName.replace(".", "_");
+
+	bool bLink = CreateLinkWrapper(fileName, QString::fromStdString(shortCut));
+	if (bLink)
+	{
+		QString msg = fileName + " \n" + QString::fromStdString(shortCut);
+		QMessageBox messageBox;
+		messageBox.information(0, "Success", msg);
+		messageBox.setFixedSize(500, 200);
+
+	}
+	else
+	{
+		emit injec_status(false, "Shortcut generation failed");
+	}
+
 }
 
 void GuiMain::check_online_version()

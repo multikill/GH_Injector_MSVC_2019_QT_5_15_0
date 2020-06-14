@@ -9,6 +9,7 @@
 #include "Injection.h"
 #include "Process.h"
 #include "cxxopts.hpp"
+#include "InjectionLib.hpp"
 
 #define INJ_KEEP_HEADER 0x0000
 
@@ -80,20 +81,24 @@ int CmdArg(int argc, char* argv[])
 		return err::help;
 	}
 
-	HINSTANCE hInjectionMod = LoadLibrary(GH_INJ_MOD_NAME);
-	if (hInjectionMod == nullptr)
+	InjectionLib injectionLib;
+	bool bLib = injectionLib.Init();
+	if(bLib == false)
+
+	//HINSTANCE hInjectionMod = LoadLibrary(GH_INJ_MOD_NAME);
+	//if (hInjectionMod == nullptr)
 	{
-		std::cout <<  " not found" << std::endl;
+		std::cout <<  "dll not found" << std::endl;
 		return err::no_lib;
 	}
 
 	
-	auto InjectA = (f_InjectA)GetProcAddress(hInjectionMod, "InjectA");
-	if (InjectA == nullptr)
-	{
-		std::cout << "InjectA " << " not found" << std::endl;
-		return err::no_func;
-	}
+	//auto InjectA = (f_InjectA)GetProcAddress(hInjectionMod, "InjectA");
+	//if (InjectA == nullptr)
+	//{
+	//	std::cout << "InjectA " << " not found" << std::endl;
+	//	return err::no_func;
+	//}
 
 	INJECTIONDATAA data{ 0 };
 
@@ -214,7 +219,8 @@ int CmdArg(int argc, char* argv[])
 	data.GenerateErrorLog = true;
 
 	
-	int iInject = InjectA(&data);
+	int iInject = injectionLib.InjectFuncA(&data);
+	//int iInject = InjectA(&data);
 	if (iInject != 0)
 	{
 		std::cout << "InjectA failed with " << iInject << std::endl;

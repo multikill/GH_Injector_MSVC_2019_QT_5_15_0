@@ -241,6 +241,7 @@
     <ClCompile Include="framelesswindow\windowdragger.cpp" />
     <ClCompile Include="MyTreeWidget.cpp" />
     <ClCompile Include="Process.cpp" />
+    <ClCompile Include="ShortCut.cpp" />
     <ClCompile Include="Zip.cpp" />
     <QtRcc Include="mainwindow.qrc" />
     <QtUic Include="framelesswindow\framelesswindow.ui" />
@@ -266,6 +267,7 @@
     <ClInclude Include="CmdArg.hpp" />
     <ClInclude Include="Compress.h" />
     <ClInclude Include="cxxopts.hpp" />
+    <ClInclude Include="ShortCut.h" />
     <QtMoc Include="framelesswindow\windowdragger.h" />
     <QtMoc Include="framelesswindow\framelesswindow.h" />
     <ClInclude Include="Globals.h" />

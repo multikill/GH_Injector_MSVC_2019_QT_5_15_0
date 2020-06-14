@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1205</width>
-    <height>601</height>
+    <height>608</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,13 +31,13 @@
        <string>Files</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_6">
-       <item row="1" column="2">
-        <widget class="QPushButton" name="btn_remove">
+       <item row="1" column="1">
+        <widget class="QPushButton" name="btn_inject">
          <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Remove highlighted entries from the list.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Inject checkmarked dll(s) into the selected process.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="text">
-          <string>&amp;Remove selected files</string>
+          <string>&amp;Inject</string>
          </property>
         </widget>
        </item>
@@ -106,16 +106,6 @@
          </item>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="QPushButton" name="btn_inject">
-         <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Inject checkmarked dll(s) into the selected process.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="text">
-          <string>&amp;Inject</string>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="0">
         <widget class="QPushButton" name="btn_add">
          <property name="toolTip">
@@ -123,6 +113,16 @@
          </property>
          <property name="text">
           <string>&amp;Add files</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QPushButton" name="btn_remove">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Remove highlighted entries from the list.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>&amp;Remove selected files</string>
          </property>
         </widget>
        </item>
@@ -631,7 +631,7 @@
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Open the changelog on pastebin.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="text">
-          <string>&amp;Changelog</string>
+          <string>Generate Short&amp;cut</string>
          </property>
         </widget>
        </item>

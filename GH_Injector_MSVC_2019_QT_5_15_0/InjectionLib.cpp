@@ -46,7 +46,7 @@ DWORD InjectionLib::InjectFuncA(INJECTIONDATAA* pData)
     if (!LoadingStatus())
         return 42;
 	
-	return InjectFuncA(pData);	
+	return InjectA(pData);	
 }
 
 DWORD InjectionLib::InjectFuncW(INJECTIONDATAW* pData)
@@ -54,7 +54,7 @@ DWORD InjectionLib::InjectFuncW(INJECTIONDATAW* pData)
     if (!LoadingStatus())
         return 42;
 	
-    return InjectFuncW(pData);
+    return InjectW(pData);
 }
 
 void InjectionLib::ScanHook(int pid, std::vector<std::string>& hList)
