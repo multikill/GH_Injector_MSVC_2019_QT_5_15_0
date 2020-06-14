@@ -150,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="frameless_window_dark.pro" />
+    <None Include="..\README.md" />
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="mainwindow.ui">
