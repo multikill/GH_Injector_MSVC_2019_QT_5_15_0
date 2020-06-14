@@ -11,24 +11,29 @@
 ###############################################################################
 */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef DARKSTYLE_HPP
+#define DARKSTYLE_HPP
 
-#include <QtWidgets>
+#include <QApplication>
+#include <QFile>
+#include <QFont>
+#include <QProxyStyle>
+#include <QStyleFactory>
 
-namespace Ui {
-  class MainWindow;
-}
-
-class MainWindow : public QMainWindow {
+class DarkStyle : public QProxyStyle {
   Q_OBJECT
 
  public:
-  explicit MainWindow(QWidget *parent = Q_NULLPTR);
-  ~MainWindow();
+  DarkStyle();
+  explicit DarkStyle(QStyle *style);
+
+  QStyle *baseStyle() const;
+
+  void polish(QPalette &palette) override;
+  void polish(QApplication *app) override;
 
  private:
-  Ui::MainWindow *ui;
+  QStyle *styleBase(QStyle *style = Q_NULLPTR) const;
 };
 
-#endif  // MAINWINDOW_H
+#endif  // DARKSTYLE_HPP

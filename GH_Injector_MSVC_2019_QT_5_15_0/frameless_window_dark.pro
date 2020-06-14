@@ -1,4 +1,3 @@
-/*
 ###############################################################################
 #                                                                             #
 # The MIT License                                                             #
@@ -9,26 +8,31 @@
 # Sources: https://github.com/Jorgen-VikingGod/Qt-Frameless-Window-DarkStyle  #
 #                                                                             #
 ###############################################################################
-*/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+QT       += core gui
 
-#include <QtWidgets>
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-namespace Ui {
-  class MainWindow;
-}
+INCLUDEPATH +="framelesswindow"
 
-class MainWindow : public QMainWindow {
-  Q_OBJECT
+TARGET      =  QtFramelessWindowDarkStyle
+TEMPLATE    =  app
 
- public:
-  explicit MainWindow(QWidget *parent = Q_NULLPTR);
-  ~MainWindow();
+SOURCES     += main.cpp\
+               mainwindow.cpp \
+               framelesswindow/framelesswindow.cpp \
+               framelesswindow/windowdragger.cpp \
+               DarkStyle.cpp
 
- private:
-  Ui::MainWindow *ui;
-};
 
-#endif  // MAINWINDOW_H
+HEADERS     += mainwindow.h \
+               framelesswindow/framelesswindow.h \
+               framelesswindow/windowdragger.h \
+               DarkStyle.h
+
+
+FORMS       += mainwindow.ui \
+               framelesswindow/framelesswindow.ui
+
+RESOURCES   += darkstyle.qrc \
+               framelesswindow.qrc
