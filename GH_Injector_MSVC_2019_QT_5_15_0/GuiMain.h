@@ -68,6 +68,7 @@ private:
 	QString		lastPathStr;
 	bool		ignoreUpdate;
 	bool		lightMode;
+	bool		lbl_hide_banner;
 	UPDATE		update;
 
 	QTimer* t_Auto_Inj;

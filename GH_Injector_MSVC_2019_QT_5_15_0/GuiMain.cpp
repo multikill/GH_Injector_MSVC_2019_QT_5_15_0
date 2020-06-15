@@ -92,6 +92,7 @@ GuiMain::GuiMain(QWidget* parent)
 	pss->txtFilter = "";
 	memset(ps_picker, 0, sizeof(Process_Struct));
 	lightMode = false;
+	lbl_hide_banner = false;
 
 	// Process Picker
 	connect(this, SIGNAL(send_to_picker(Process_State_Struct*, Process_Struct*)),
@@ -124,6 +125,10 @@ GuiMain::GuiMain(QWidget* parent)
 	load_banner();
 	load_change(42);
 	create_change(42);
+#ifdef _DEBUG
+	lbl_hide_banner = 1;
+#endif _DEBUG
+	hide_banner();
 	//check_online_version();
 
 	
@@ -150,9 +155,6 @@ GuiMain::GuiMain(QWidget* parent)
 	}
 
 
-#ifdef _DEBUG
-	hide_banner();
-#endif _DEBUG
 	platformCheck();
 
 	bool status = SetDebugPrivilege(true);
@@ -489,7 +491,8 @@ void GuiMain::load_banner()
 
 void GuiMain::hide_banner()
 {
-	ui.lbl_img->setVisible(false);
+	if(lbl_hide_banner == true)
+		ui.lbl_img->setVisible(false);
 }
 
 void GuiMain::reset_settings()
@@ -589,9 +592,10 @@ void GuiMain::save_settings()
 	settings.setValue("TOOLTIPSON",		ui.btn_tooltip->isChecked());
 
 	// Not visible
-	settings.setValue("LASTDIR",			lastPathStr);
+	settings.setValue("LASTDIR",		lastPathStr);
 	settings.setValue("IGNOREUPDATES",	ignoreUpdate);
 	settings.setValue("LIGHTMODE",		lightMode);
+	settings.setValue("HIDEBANNER",		lbl_hide_banner);
 	settings.setValue("STATE",		saveState());
 	settings.setValue("GEOMETRY", saveGeometry());	
 	// Broken on frameless window
@@ -676,6 +680,7 @@ void GuiMain::load_settings()
 	lastPathStr		= settings.value("LASTDIR").toString();
 	ignoreUpdate	= settings.value("IGNOREUPDATES").toBool();
 	lightMode		= settings.value("LIGHTMODE").toBool();
+	lbl_hide_banner = settings.value("HIDEBANNER").toBool();
 	restoreState	(settings.value("STATE").toByteArray());
 	restoreGeometry	(settings.value("GEOMETRY").toByteArray());
 
