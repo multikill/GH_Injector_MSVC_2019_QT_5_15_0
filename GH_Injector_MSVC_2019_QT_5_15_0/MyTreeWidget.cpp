@@ -18,7 +18,7 @@ MyTreeWidget::MyTreeWidget(QWidget* parent)
 	header()->setSectionsClickable(true);		// use our own sorting method instead
 	header()->setStretchLastSection(true);
 
-	connect(header(), SIGNAL(sectionClicked(int)), this, SLOT(customSortByColumn(int)));
+	connect(header(), SIGNAL(sectionClicked(int)), this,   SLOT(customSortByColumn(int)));
 	customSortByColumn(header()->sortIndicatorSection());	
 }
 
@@ -54,8 +54,7 @@ void MyTreeWidget::customSortByColumn(int column)
 	// here you can get the order
 	Qt::SortOrder order = header()->sortIndicatorOrder();
 
-	
-	//return;
+	return;
 
 	// default
 	if (column != 1)

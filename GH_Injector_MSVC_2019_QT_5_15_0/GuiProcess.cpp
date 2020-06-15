@@ -36,6 +36,8 @@ GuiProcess::GuiProcess(QWidget* parent)
 	connect(ui.txt_filter, &QLineEdit::textChanged, this, &GuiProcess::name_change);
 	connect(ui.btn_select, SIGNAL(clicked()), this, SLOT(proc_select()));
 	connect(ui.cb_session, SIGNAL(stateChanged(int)), this, SLOT(session_change()));
+	connect(ui.tree_process->header(), SIGNAL(sectionClicked(int)), this, SLOT(customSort(int)));
+	//connect(header(), SIGNAL(sectionClicked(int)), this, SLOT(customSortByColumn(int)));
 
 	for (int i = 0; i <= 3; i++)
 		ui.tree_process->resizeColumnToContents(i);
@@ -129,6 +131,7 @@ void GuiProcess::refresh_process()
 {
 	std::vector<Process_Struct> all_proc;
 	getProcessList(all_proc);
+	sortProcessList(all_proc, sort_prev);
 
 	ui.tree_process->clear();
 
@@ -184,6 +187,23 @@ void GuiProcess::proc_select()
 	
 	emit send_to_inj(pss, ps);
 	//this->hide();
+}
+
+void GuiProcess::customSort(int column)
+{
+	// here you can get the order
+	Qt::SortOrder order = ui.tree_process->header()->sortIndicatorOrder();
+
+	if (column == 2 && order == Qt::AscendingOrder)
+		sort_prev = ASCI_A;
+	else if (column == 2 && order == Qt::DescendingOrder)
+		sort_prev = ASCI_Z;
+	else if (column == 1 && order == Qt::DescendingOrder)
+		sort_prev = NUM_HIGH;
+	else
+		sort_prev = NUM_LOW;
+
+	emit refresh_process();
 }
 
 void GuiProcess::get_from_inj(Process_State_Struct* procStateStruct, Process_Struct* procStruct)

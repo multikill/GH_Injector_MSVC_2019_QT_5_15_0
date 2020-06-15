@@ -22,6 +22,14 @@ struct Process_Struct
     int             session;
 };
 
+enum SORT_PS
+{
+	NUM_LOW,
+	NUM_HIGH,
+    ASCI_A,
+    ASCI_Z
+};
+
 enum _PROCESSINFOCLASS
 {
 	ProcessSessionInformation	= 24
@@ -49,6 +57,7 @@ bool getProcFullPath(char* fullPath, int strSize, int pid);
 Process_Struct getProcessByName(const char* name);
 Process_Struct getProcessByPID(const int pid);
 bool getProcessList(std::vector<Process_Struct>& pl);
+bool sortProcessList(std::vector<Process_Struct>& pl, SORT_PS sort);
 
 bool SetDebugPrivilege(bool Enable);
 bool isCorrectPlatform();

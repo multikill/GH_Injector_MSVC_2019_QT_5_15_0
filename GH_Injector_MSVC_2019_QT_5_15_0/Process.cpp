@@ -3,6 +3,8 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <algorithm>
+#include <functional>
 #include "process.h"
 
 f_NtQueryInformationProcess p_NtQueryInformationProcess = nullptr;
@@ -260,6 +262,46 @@ bool getProcessList(std::vector<Process_Struct>& pl)
     return true;
 }
 
+bool sortProcessList(std::vector<Process_Struct>& pl, SORT_PS sort)
+{
+    if (sort == NUM_LOW)
+    {
+		std::sort(pl.begin(), pl.end(), [](Process_Struct& p1, Process_Struct& p2) {
+			if (p1.pid < p2.pid)
+				return true;
+			return false;
+			});
+    }
+    else if (sort == NUM_HIGH)
+	{
+		std::sort(pl.begin(), pl.end(), [](Process_Struct& p1, Process_Struct& p2) {
+			if (p1.pid > p2.pid)
+				return true;
+			return false;
+			});
+	}
+	else if (sort == ASCI_A)
+	{
+	    std::sort(pl.begin(), pl.end(), [](Process_Struct& p1, Process_Struct& p2) {
+            int res = strcmp(p1.name, p2.name);
+            if(res < 0)
+			    return true;
+		    return false;
+		    });
+	}
+	else
+	{
+		std::sort(pl.begin(), pl.end(), [](Process_Struct& p1, Process_Struct& p2) {
+			int res = strcmp(p1.name, p2.name);
+			if (res > 0)
+				return true;
+			return false;
+			});
+	}
+
+    return true;
+}
+
 bool SetDebugPrivilege(bool Enable)
 {
     HANDLE hToken = 0;
@@ -345,3 +387,4 @@ BOOL StartProcess(const char* szExeFile)
 
     return TRUE;
 }
+
