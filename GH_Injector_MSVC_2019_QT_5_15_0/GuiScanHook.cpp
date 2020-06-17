@@ -92,12 +92,17 @@ void GuiScanHook::scan_clicked()
 
 	std::vector<std::string> tempHookList;
 	
-	tempHookList.push_back( "DLL.Function");
-	tempHookList.push_back( "DLL2.Function3");
-	//InjLib.ScanHook(m_pid, tempHookList);
-	
-	setItem(tempHookList);
-
+	//tempHookList.push_back( "DLL.Function");
+	//tempHookList.push_back( "DLL2.Function3");
+	int fail = InjLib.ScanHook(m_pid, tempHookList);
+	if (fail == true)
+	{
+		setItem({ "Failed" });		
+	}
+	else
+	{
+		setItem(tempHookList);
+	}
 }
 
 void GuiScanHook::unhook_clicked()
@@ -106,10 +111,19 @@ void GuiScanHook::unhook_clicked()
 		return;
 	
 	std::vector<std::string> selected = getSelectedItem();
-	//InjLib.RestoreHook(m_pid, selected);
-
-	List.clear();
-	model->setStringList(List);
+	int fail = InjLib.RestoreHook(selected);
+	if (fail == true)
+	{
+		List.clear();
+		model->setStringList(List);
+		setItem({ "Failed" });
+	}
+	else
+	{
+		List.clear();
+		model->setStringList(List);
+		scan_clicked();
+	}
 
 	int i = 42;
 }

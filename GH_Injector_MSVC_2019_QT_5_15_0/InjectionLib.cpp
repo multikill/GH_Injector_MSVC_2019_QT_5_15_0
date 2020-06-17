@@ -57,42 +57,82 @@ DWORD InjectionLib::InjectFuncW(INJECTIONDATAW* pData)
     return InjectW(pData);
 }
 
-void InjectionLib::ScanHook(int pid, std::vector<std::string>& hList)
+int InjectionLib::ScanHook(int pid, std::vector<std::string>& hList)
 {
-    hookInfo.clear();
+	if (!LoadingStatus())
+		return 42;
+
+    memset(info, 0, sizeof(info));
+	targetPid = pid;
+
+    DWORD err1, err2;
+    auto val_ret = ValidateFunc(targetPid, err1, err2, info, 30, &CountOut);
+
+	if (!val_ret)
+	{
+		//printf("ValidateInjectionFunctions failed:\n\t%08X\n\t%08X\n", err1, err2);
+		return 43;
+	}
+
+    //printf("Injection functions validated\n");
 
 	
-    DWORD err1, err2;
-    ValidateFunc(pid, err1, err2, hookInfo);
-
-
-    UINT Changed = 0;
-    for (auto i : hookInfo)
-    {
-        if (i.ChangeCount && !i.ErrorCode)
-        {
-            hList.push_back(i.ModulePath + "." + i.FunctionName);
-            ++Changed;
-        }
-    }
-
+	for (UINT i = 0; i != CountOut; ++i)
+	{
+		if (info[i].ChangeCount && !info[i].ErrorCode)
+		{
+			//printf("Hook detected: %s->%s (%d)\n", info[i].ModuleName, info[i].FunctionName, info[i].ChangeCount);
+			hList.push_back(std::string(info[i].ModuleName) + "->" + std::string(info[i].FunctionName) /*+ info[i].ChangeCount */);
+			++Changed;
+		}
+	}
+    
+    return 0;
     //ToDo: return Error
 }
 
-void InjectionLib::RestoreHook(int pid, std::vector<std::string>& hList)
+int InjectionLib::RestoreHook(std::vector<std::string>& hList)
 {
-    DWORD err1, err2;
-    std::vector<HookInfo> hookInfoNew;
-	
-    for(auto i : hookInfo)
-    {
-        std::string dllFunc = i.ModulePath + "." + i.FunctionName;
-    	if(std::find(hList.begin(), hList.end(), dllFunc) != hList.end())
-    	{
-            hookInfoNew.push_back(i);
-    	}
-    }
+	if (!LoadingStatus())
+		return 42;
 
-    RestoreFunc(pid, err1, err2, hookInfoNew);
-	//ToDo: return Error
+	HookInfo infoRestore[30];
+	memset(infoRestore, 0, sizeof(infoRestore));
+	int counter = 0;
+
+	// far too complicated
+	for (UINT i = 0; i != CountOut; ++i)
+	{
+		if (info[i].ChangeCount && !info[i].ErrorCode)
+		{
+			std::string guiString = std::string(info[i].ModuleName) + "->" + std::string(info[i].FunctionName) /*+ info[i].ChangeCount */;
+			if (std::find(hList.begin(), hList.end(), guiString) != hList.end())
+			{
+				memcpy(&infoRestore[counter], &info[i], sizeof(HookInfo));
+				counter++;
+			}
+		}
+	}
+
+	if (counter)
+	{
+		//printf("Restoring hooks\n");
+
+		auto res_ret = RestoreFunc(targetPid, err1, err2, infoRestore, CountOut, &CountOut);
+
+		if (!res_ret)
+		{
+			//printf("RestoreInjectionFunctions failed:\n\t%08X\n\t%08X\n", err1, err2);
+
+			return 43;
+		}
+
+		//printf("Hooks restored\n");
+	}
+	else
+	{
+		//printf("No hooks found\n");
+	}
+
+	return 0;
 }

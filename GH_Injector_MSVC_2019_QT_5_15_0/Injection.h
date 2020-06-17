@@ -89,16 +89,15 @@ struct INJECTIONDATAW
 //ValidateInjectionFunctions fills an std::vector with this info, result can simply be passed to RestoreInjectionFunctions
 struct HookInfo
 {
-	std::string	ModulePath;
-	std::string FunctionName;
+	const char* ModuleName;
+	const char* FunctionName;
 
-	HINSTANCE			hModuleBase;
-	BYTE*				pReference;
-	void*				pFunc;
-	UINT				ChangeCount;
-	BYTE				OriginalBytes[HOOK_SCAN_BYTE_COUNT];
+	HINSTANCE		hModuleBase;
+	void* pFunc;
+	UINT			ChangeCount;
+	BYTE			OriginalBytes[HOOK_SCAN_BYTE_COUNT];
 
-	DWORD				ErrorCode;
+	DWORD ErrorCode;
 };
 
 //Cloaking options:
@@ -130,5 +129,5 @@ struct HookInfo
 using f_InjectA = DWORD(__stdcall*)(INJECTIONDATAA* pData);
 using f_InjectW = DWORD(__stdcall*)(INJECTIONDATAW* pData);
 
-using f_ValidateInjectionFunctions = bool(__stdcall*)(DWORD dwTargetProcessId, DWORD& ErrorCode, DWORD& LastWin32Error, std::vector<HookInfo>& HookDataOut);
-using f_RestoreInjectionFunctions = bool(__stdcall*)(DWORD dwTargetProcessId, DWORD& ErrorCode, DWORD& LastWin32Error, std::vector<HookInfo>& HookDataIn);
+using f_ValidateInjectionFunctions = bool(__stdcall*)(DWORD dwTargetProcessId, DWORD& ErrorCode, DWORD& LastWin32Error, HookInfo* HookDataOut, UINT Count, UINT* CountOut);
+using f_RestoreInjectionFunctions = bool(__stdcall*)(DWORD dwTargetProcessId, DWORD& ErrorCode, DWORD& LastWin32Error, HookInfo* HookDataIn, UINT Count, UINT* CountOut);

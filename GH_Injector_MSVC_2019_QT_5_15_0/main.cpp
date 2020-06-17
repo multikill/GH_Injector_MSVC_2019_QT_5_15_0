@@ -34,10 +34,9 @@ int main(int argc, char* argv[]) {
 	//InjectionLib inj;
 	//inj.Init();
     //std::vector<std::string> l;
-	//l.push_back({});
-	//l.reserve(10);
 
-	//inj.ScanHook(18108, l);
+	//inj.ScanHook(9652, l);
+	//inj.RestoreHook();
 
 	// Restart Application loop
 	int currentExitCode = 0;
