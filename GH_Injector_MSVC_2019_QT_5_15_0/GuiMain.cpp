@@ -95,16 +95,16 @@ GuiMain::GuiMain(QWidget* parent)
 	lbl_hide_banner = false;
 
 	// Process Picker
-	connect(this, SIGNAL(send_to_picker(Process_State_Struct*, Process_Struct*)),
+	connect(this,	SIGNAL(send_to_picker(Process_State_Struct*, Process_Struct*)),
 		gui_Picker, SLOT(get_from_inj(Process_State_Struct*, Process_Struct*)));
 	connect(gui_Picker, SIGNAL(send_to_inj(Process_State_Struct*, Process_Struct*)),
 		this, SLOT(get_from_picker(Process_State_Struct*, Process_Struct*)));
 
 	// Scan Hook
-	connect(this, SIGNAL(send_to_scan_hook(int, int)),
-		gui_Scanner, SLOT(get_from_inj_to_sh(int, int)));
+	connect(this,		SIGNAL(send_to_scan_hook(int, int)),
+		gui_Scanner,	SLOT(get_from_inj_to_sh(int, int)));
 	connect(gui_Scanner, SIGNAL(send_to_inj_sh(int, int)),
-		this, SLOT(get_from_scan_hook(int, int)));
+		this,			SLOT(get_from_scan_hook(int, int)));
 
 	
 	connect(ver_Manager,	&QNetworkAccessManager::finished, this, &GuiMain::replyFinished);
@@ -138,7 +138,7 @@ GuiMain::GuiMain(QWidget* parent)
 		emit injec_status(false, failMsg);
 	}
 
-	// Reduze Height
+	// Reduce Height
 	if(this->parentWidget())
 	{
 		QSize winSize = this->parentWidget()->size();
@@ -329,7 +329,6 @@ void GuiMain::cmb_proc_name_change()
 		ui.txt_pid->setText(QString::number(ps_picker->pid));
 		ui.txt_arch->setText(GuiMain::arch_to_str(ps_picker->arch));
 
-		btn_hook_scan_change();
 	}
 }
 
@@ -343,17 +342,19 @@ void GuiMain::txt_pid_change()
 		ui.cmb_proc->setCurrentText(ps_picker->name);
 		ui.txt_arch->setText(GuiMain::arch_to_str(ps_picker->arch));
 
-		btn_hook_scan_change();
 	}
 }
 
 void GuiMain::btn_hook_scan_change()
 {
+	if (ui.rb_proc->isChecked())
+	{
 	if(ps_picker->arch)
 		ui.btn_hooks->setEnabled(true);
 
 	else
 		ui.btn_hooks->setEnabled(false);
+	}
 }
 
 void GuiMain::get_from_picker(Process_State_Struct* procStateStruct, Process_Struct* procStruct)
@@ -520,6 +521,9 @@ void GuiMain::hook_Scan()
 		framelessScanner.show();
 	else
 		gui_Scanner->show();
+
+	cmb_proc_name_change();
+	txt_pid_change();
 	
 	emit send_to_scan_hook(ps_picker->pid, 0);
 }

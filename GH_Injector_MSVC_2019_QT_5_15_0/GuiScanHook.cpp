@@ -22,7 +22,7 @@ GuiScanHook::GuiScanHook(QWidget* parent)
 	model = new QStringListModel(this);
 
 	
-	List << "I'm" << "a" << "test" << "output";
+	List << "Select a" << "process first";
 
 	model->setStringList(List);
 	ui.lv_scanhook->setModel(model);
@@ -87,9 +87,12 @@ void GuiScanHook::refresh_gui()
 
 void GuiScanHook::scan_clicked()
 {	
-	if(m_pid == 0)
+	if (m_pid == 0)
+	{
+		setItem({ "Select process" });
 		return;
-
+	}
+		
 	std::vector<std::string> tempHookList;
 	
 	//tempHookList.push_back( "DLL.Function");
