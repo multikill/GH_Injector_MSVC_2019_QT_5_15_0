@@ -498,7 +498,7 @@
           <bool>true</bool>
          </property>
          <property name="title">
-          <string>Manuel mapping</string>
+          <string>manual mapping</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="5" column="0">

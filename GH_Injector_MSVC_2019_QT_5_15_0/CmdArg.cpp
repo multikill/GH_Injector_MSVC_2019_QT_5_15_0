@@ -30,7 +30,7 @@ int CmdArg(int argc, char* argv[])
 		("d,delay", "Delay [ms]", cxxopts::value<int >()->default_value("0"))
 		("w,wait", "Wait for process", cxxopts::value<bool>()->default_value("false"))
 
-		("l,load", "Load method [ loadlib | ldr | ldrp | manuel]", cxxopts::value<std::string>()->default_value("load"))
+		("l,load", "Load method [ loadlib | ldr | ldrp | manual]", cxxopts::value<std::string>()->default_value("load"))
 		("s,start", "Launch method [ create | hijack | hook | apc ]", cxxopts::value<std::string>()->default_value("create"))
 		("j,hijack", "Hijack handle", cxxopts::value<bool>()->default_value("false"))
 		("o,cloak", "Cloak thread", cxxopts::value<bool>()->default_value("false"))
@@ -39,7 +39,7 @@ int CmdArg(int argc, char* argv[])
 		("r,randomize", "Randomize file name", cxxopts::value<bool>()->default_value("false"))
 		("u,unlink", "Unlink from PEB", cxxopts::value<bool>()->default_value("false"))
 		("c,copy", "Load DLL copy", cxxopts::value<bool>()->default_value("false"))
-		("m,mapping", "Manuel mapping flags (MM_DEFAULT)", cxxopts::value<int>()->default_value("0x01fc0000"))
+		("m,mapping", "Manual mapping flags (MM_DEFAULT)", cxxopts::value<int>()->default_value("0x01fc0000"))
 	
 		("v,version", "Print version", cxxopts::value<bool>()->default_value("false"))
 		("y,style", "Performance style", cxxopts::value<bool>()->default_value("false"))
@@ -209,8 +209,8 @@ int CmdArg(int argc, char* argv[])
 
 	
 	// flags
-	if (result.count("manuel"))
-		data.Flags |= result["manuel"].as<int>();
+	if (result.count("manual"))
+		data.Flags |= result["manual"].as<int>();
 	else
 		if (data.Mode == INJECTION_MODE::IM_ManualMap)
 			data.Flags |= MM_DEFAULT;
@@ -259,7 +259,7 @@ INJECTION_MODE getInjMode(std::string str)
 		return INJECTION_MODE::IM_LdrpLoadDll;
 
 	
-	if (str == "manuel")
+	if (str == "manual")
 		return  INJECTION_MODE::IM_LdrLoadDll;
 
 	

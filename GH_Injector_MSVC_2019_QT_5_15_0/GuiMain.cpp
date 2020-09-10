@@ -577,7 +577,7 @@ void GuiMain::save_settings()
 	settings.setValue("RANDOMIZE",		ui.cb_random->isChecked());
 	settings.setValue("DLLCOPY",		ui.cb_copy->isChecked());
 
-	// Manuel mapping
+	// manual mapping
 	settings.setValue("SHIFTMODULE",	ui.cb_shift->isChecked());
 	settings.setValue("CLEANDIR",		ui.cb_clean->isChecked());
 	settings.setValue("IMPORTS",		ui.cb_imports->isChecked());
@@ -662,7 +662,7 @@ void GuiMain::load_settings()
 	ui.cb_random	->setChecked(settings.value("RANDOMIZE").toBool());
 	ui.cb_copy		->setChecked(settings.value("DLLCOPY").toBool());
 
-	// Manuel mapping
+	// manual mapping
 	ui.cb_shift		->setChecked(settings.value("SHIFTMODULE").toBool());
 	ui.cb_clean		->setChecked(settings.value("CLEANDIR").toBool());
 	ui.cb_imports	->setChecked(settings.value("IMPORTS").toBool());
@@ -1068,7 +1068,7 @@ void GuiMain::tooltip_change()
 	ui.cb_random->setToolTipDuration(duration);
 	ui.cb_copy->setToolTipDuration(duration);
 
-	// Manuel mapping
+	// manual mapping
 	ui.cb_shift->setToolTipDuration(duration);
 	ui.cb_clean->setToolTipDuration(duration);
 	ui.cb_imports->setToolTipDuration(duration);
@@ -1217,7 +1217,7 @@ void GuiMain::open_log()
 	{
 	case 1:  shortCut += " -load ldr";			break;
 	case 2:  shortCut += " -load ldrp";			break;
-	case 3:  shortCut += " -load manuel";		break;
+	case 3:  shortCut += " -load manual";		break;
 	default: /*shortCut += " -load loadlib"*/;	break;
 	}
 
