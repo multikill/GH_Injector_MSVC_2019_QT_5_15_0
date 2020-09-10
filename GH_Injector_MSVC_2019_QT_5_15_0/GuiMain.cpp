@@ -977,7 +977,7 @@ void GuiMain::inject_file()
 		DWORD res = InjLib.InjectFuncA(&data);
 		if (res)
 		{
-			QString failMsg = "Inject failed with" + QString::number(res);
+			QString failMsg = "Inject failed with 0x" + QString("%1").arg(res, 8, 16, QLatin1Char('0')).toUpper();
 			emit injec_status(false, failMsg);
 			return;
 		}
