@@ -349,3 +349,9 @@ healthchecksdb
 *.exe
 /GH_Injector_MSVC_2019_QT_5_15_0/GH_Inj_Log.txt
 *.ini
+*.exp
+*.lib
+/Out2/QT_GH_Injector_Dynamic/GH_Inj_Log.txt
+/Out2/setup_dynamic.ps1
+/Out2/QT_GH_Injector_Static/GH_Inj_Log.txt
+/Out2/setup_static.ps1
