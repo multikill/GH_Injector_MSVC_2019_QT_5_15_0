@@ -263,8 +263,8 @@ void GuiMain::platformCheck()
 
 
 	QMessageBox::StandardButton reply;
-	reply = QMessageBox::warning(nullptr, "Warning architecture conflict", "Since you're using a\
-64-bit version of Windows it's recommended to use the 64-bitversion of the injector. \
+	reply = QMessageBox::warning(nullptr, "Warning architecture conflict", "Since you're using a \
+64-bit version of Windows it's recommended to use the 64-bit version of the injector. \
 Do you want to switch to the 64-bit version?", QMessageBox::Yes | QMessageBox::No);
 
 	if (reply == QMessageBox::No)
