@@ -263,8 +263,8 @@ void GuiMain::platformCheck()
 
 
 	QMessageBox::StandardButton reply;
-	reply = QMessageBox::warning(nullptr, "Warning architecture conflict", "Since you're using a\
-64-bit version of Windows it's recommended to use the 64-bitversion of the injector. \
+	reply = QMessageBox::warning(nullptr, "Warning architecture conflict", "Since you're using a \
+64-bit version of Windows it's recommended to use the 64-bit version of the injector. \
 Do you want to switch to the 64-bit version?", QMessageBox::Yes | QMessageBox::No);
 
 	if (reply == QMessageBox::No)
@@ -577,7 +577,7 @@ void GuiMain::save_settings()
 	settings.setValue("RANDOMIZE",		ui.cb_random->isChecked());
 	settings.setValue("DLLCOPY",		ui.cb_copy->isChecked());
 
-	// Manuel mapping
+	// manual mapping
 	settings.setValue("SHIFTMODULE",	ui.cb_shift->isChecked());
 	settings.setValue("CLEANDIR",		ui.cb_clean->isChecked());
 	settings.setValue("IMPORTS",		ui.cb_imports->isChecked());
@@ -662,7 +662,7 @@ void GuiMain::load_settings()
 	ui.cb_random	->setChecked(settings.value("RANDOMIZE").toBool());
 	ui.cb_copy		->setChecked(settings.value("DLLCOPY").toBool());
 
-	// Manuel mapping
+	// manual mapping
 	ui.cb_shift		->setChecked(settings.value("SHIFTMODULE").toBool());
 	ui.cb_clean		->setChecked(settings.value("CLEANDIR").toBool());
 	ui.cb_imports	->setChecked(settings.value("IMPORTS").toBool());
@@ -977,7 +977,7 @@ void GuiMain::inject_file()
 		DWORD res = InjLib.InjectFuncA(&data);
 		if (res)
 		{
-			QString failMsg = "Inject failed with" + QString::number(res);
+			QString failMsg = "Inject failed with 0x" + QString("%1").arg(res, 8, 16, QLatin1Char('0')).toUpper();
 			emit injec_status(false, failMsg);
 			return;
 		}
@@ -1068,7 +1068,7 @@ void GuiMain::tooltip_change()
 	ui.cb_random->setToolTipDuration(duration);
 	ui.cb_copy->setToolTipDuration(duration);
 
-	// Manuel mapping
+	// manual mapping
 	ui.cb_shift->setToolTipDuration(duration);
 	ui.cb_clean->setToolTipDuration(duration);
 	ui.cb_imports->setToolTipDuration(duration);
@@ -1217,7 +1217,7 @@ void GuiMain::open_log()
 	{
 	case 1:  shortCut += " -load ldr";			break;
 	case 2:  shortCut += " -load ldrp";			break;
-	case 3:  shortCut += " -load manuel";		break;
+	case 3:  shortCut += " -load manual";		break;
 	default: /*shortCut += " -load loadlib"*/;	break;
 	}
 
