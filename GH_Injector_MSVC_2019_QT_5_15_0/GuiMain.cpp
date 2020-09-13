@@ -732,21 +732,21 @@ void GuiMain::create_change(int i)
 	switch (method)
 	{
 		case LAUNCH_METHOD::LM_NtCreateThreadEx:
-			ui.cmb_load->setToolTip("NtCreateThreadEx: Creates a simple remote thread to load the dll(s).");
+			ui.cmb_create->setToolTip("NtCreateThreadEx: Creates a simple remote thread to load the dll(s).");
 			ui.cb_clock->setEnabled(true);
 			break;
 		case LAUNCH_METHOD::LM_HijackThread:
-			ui.cmb_load->setToolTip("Thread hijacking: Redirects a thread to a codecave to load the dll(s).");
+			ui.cmb_create->setToolTip("Thread hijacking: Redirects a thread to a codecave to load the dll(s).");
 			ui.cb_clock->setEnabled(false);
 			ui.cb_clock->setChecked(false);
 			break;		
 		case LAUNCH_METHOD::LM_SetWindowsHookEx:
-			ui.cmb_load->setToolTip("SetWindowsHookEx: Adds a hook into the window callback list which then loads the dll(s).");
+			ui.cmb_create->setToolTip("SetWindowsHookEx: Adds a hook into the window callback list which then loads the dll(s).");
 			ui.cb_clock->setEnabled(false);
 			ui.cb_clock->setChecked(false);
 			break;		
 		default:
-			ui.cmb_load->setToolTip("QueueUserAPC: Registers an asynchronous procedure call to the process' threads which then loads the dll(s).");
+			ui.cmb_create->setToolTip("QueueUserAPC: Registers an asynchronous procedure call to the process' threads which then loads the dll(s).");
 			ui.cb_clock->setEnabled(false);
 			ui.cb_clock->setChecked(false);
 			break;
