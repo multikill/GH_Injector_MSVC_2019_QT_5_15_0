@@ -686,8 +686,8 @@ void GuiMain::load_settings()
 	// Not visible
 	lastPathStr		= settings.value("LASTDIR").toString();
 	ignoreUpdate	= settings.value("IGNOREUPDATES").toBool();
-	lightMode		= settings.value("LIGHTMODE").toBool();
-	lbl_hide_banner = settings.value("HIDEBANNER").toBool();
+	lightMode		= settings.value("LIGHTMODE", false).toBool();
+	lbl_hide_banner = settings.value("HIDEBANNER", false).toBool();
 	restoreState	(settings.value("STATE").toByteArray());
 	restoreGeometry	(settings.value("GEOMETRY").toByteArray());
 
