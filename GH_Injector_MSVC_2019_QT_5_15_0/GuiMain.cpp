@@ -329,6 +329,9 @@ void GuiMain::cmb_proc_name_change()
 		ui.txt_pid->setText(QString::number(ps_picker->pid));
 		ui.txt_arch->setText(GuiMain::arch_to_str(ps_picker->arch));
 
+		int index = ui.cmb_proc->findText(proc);
+		if(index == -1 && ps_picker->pid) // check exists
+			ui.cmb_proc->addItem(ps_picker->name);
 	}
 }
 
