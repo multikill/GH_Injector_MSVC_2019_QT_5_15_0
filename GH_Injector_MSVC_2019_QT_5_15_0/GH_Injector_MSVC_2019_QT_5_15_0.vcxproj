@@ -204,6 +204,15 @@
       <AdditionalDependencies>Urlmon.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y $(QtDllPath)\Qt5Cored.dll $(OutDir)
+xcopy /y $(QtDllPath)\Qt5Guid.dll $(OutDir)
+xcopy /y $(QtDllPath)\Qt5Networkd.dll $(OutDir)
+xcopy /y $(QtDllPath)\Qt5Widgetsd.dll $(OutDir)
+xcopy /y $(QtDllPath)\Qt5Cored.dll $(OutDir)
+xcopy /y $(QTDIR)\plugins\platforms\qwindowsd.dll  $(OutDir)platforms\
+xcopy /y $(QTDIR)\plugins\imageformats\qjpegd.dll  $(OutDir)imageformats\</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Link>
@@ -213,6 +222,15 @@
     <ClCompile>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
+    <PostBuildEvent>
+      <Command>xcopy /y $(QtDllPath)\Qt5Cored.dll $(OutDir)
+xcopy /y $(QtDllPath)\Qt5Guid.dll $(OutDir)
+xcopy /y $(QtDllPath)\Qt5Networkd.dll $(OutDir)
+xcopy /y $(QtDllPath)\Qt5Widgetsd.dll $(OutDir)
+xcopy /y $(QtDllPath)\Qt5Cored.dll $(OutDir)
+xcopy /y $(QTDIR)\plugins\platforms\qwindowsd.dll  $(OutDir)platforms\
+xcopy /y $(QTDIR)\plugins\imageformats\qjpegd.dll  $(OutDir)imageformats\</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Link>
@@ -221,6 +239,15 @@
     <ClCompile>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
+    <PostBuildEvent>
+      <Command>xcopy /y $(QtDllPath)\Qt5Core.dll $(OutDir)
+xcopy /y $(QtDllPath)\Qt5Gui.dll $(OutDir)
+xcopy /y $(QtDllPath)\Qt5Network.dll $(OutDir)
+xcopy /y $(QtDllPath)\Qt5Widgets.dll $(OutDir)
+xcopy /y $(QtDllPath)\Qt5Core.dll $(OutDir)
+xcopy /y $(QTDIR)\plugins\platforms\qwindows.dll  $(OutDir)platforms\
+xcopy /y $(QTDIR)\plugins\imageformats\qjpeg.dll  $(OutDir)imageformats\</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link>
@@ -229,6 +256,15 @@
     <ClCompile>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
+    <PostBuildEvent>
+      <Command>xcopy /y $(QtDllPath)\Qt5Core.dll $(OutDir)
+xcopy /y $(QtDllPath)\Qt5Gui.dll $(OutDir)
+xcopy /y $(QtDllPath)\Qt5Network.dll $(OutDir)
+xcopy /y $(QtDllPath)\Qt5Widgets.dll $(OutDir)
+xcopy /y $(QtDllPath)\Qt5Core.dll $(OutDir)
+xcopy /y $(QTDIR)\plugins\platforms\qwindows.dll  $(OutDir)platforms\
+xcopy /y $(QTDIR)\plugins\imageformats\qjpeg.dll  $(OutDir)imageformats\</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Static|x64'">
     <Link>
