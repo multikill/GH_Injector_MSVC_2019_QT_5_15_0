@@ -216,7 +216,7 @@
 #maximizeButton:hover{
   background-color:palette(alternate-base);
 }
-##maximizeButton:pressed{
+#maximizeButton:pressed{
   background-color:palette(highlight);
 }</string>
            </property>
@@ -246,7 +246,7 @@
 #closeButton:hover{
   background-color:palette(alternate-base);
 }
-##closeButton:pressed{
+#closeButton:pressed{
   background-color:palette(highlight);
 }</string>
            </property>

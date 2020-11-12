@@ -50,7 +50,8 @@ using f_NtQueryInformationProcess = NTSTATUS(__stdcall *)
     ULONG * SizeOut
 );
 
-enum ARCH getFileArch(const char* szDllFile);
+enum ARCH getFileArch(const wchar_t* szDllFile);
+enum ARCH getFileArchA(const char* szDllFile);
 enum ARCH getProcArch(const int pid);
 int getProcSession(const int pid);
 bool getProcFullPath(char* fullPath, int strSize, int pid);
@@ -62,3 +63,5 @@ bool sortProcessList(std::vector<Process_Struct>& pl, SORT_PS sort);
 bool SetDebugPrivilege(bool Enable);
 bool isCorrectPlatform();
 BOOL StartProcess(const char* szExeFile);
+
+bool FileExistsW(const wchar_t * szFile);

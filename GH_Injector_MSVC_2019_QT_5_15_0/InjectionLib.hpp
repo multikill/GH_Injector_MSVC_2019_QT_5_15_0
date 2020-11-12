@@ -30,4 +30,6 @@ private:
 	f_InjectW InjectW;
 	f_ValidateInjectionFunctions ValidateFunc;
 	f_RestoreInjectionFunctions RestoreFunc;
+	f_GetVersionA GetVersionA;
+	f_GetVersionW GetVersionW;
 };

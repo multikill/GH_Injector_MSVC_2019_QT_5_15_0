@@ -27,6 +27,9 @@ private:
 	QFileSystemModel		model;
 	SORT_PS					sort_prev;
 
+protected:
+	bool eventFilter(QObject * obj, QEvent * event) override;
+
 signals:
 	void send_to_inj(Process_State_Struct* procStateStruct, Process_Struct* procStruct);
 
@@ -40,6 +43,7 @@ private slots:
 	void filter_change(int i);
 	void session_change();
 	void name_change(const QString&);
-	void proc_select();
+	void proc_select(bool ignore = false);
 	void customSort(int);
+	void on_treeView_doubleClicked(const QModelIndex & index);
 };

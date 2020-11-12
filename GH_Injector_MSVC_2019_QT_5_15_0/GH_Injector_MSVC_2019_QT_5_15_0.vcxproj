@@ -104,29 +104,27 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="QtSettings">
-    <QtInstall>msvc2019</QtInstall>
+    <QtInstall>qt-5.15.1-static-msvc2019-x86_64</QtInstall>
     <QtModules>core;network;gui;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'" Label="QtSettings">
     <QtInstall>msvc2019</QtInstall>
     <QtModules>core;network;gui;widgets</QtModules>
-    <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>msvc2019_64</QtInstall>
     <QtModules>core;network;gui;widgets</QtModules>
-    <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtInstall>msvc2019_64</QtInstall>
     <QtModules>core;network;gui;widgets</QtModules>
-    <QtBuildConfig>release</QtBuildConfig>
+    <QtPathLibraryExecutables>C:/Qt/5.15.0/msvc2019_64/bin</QtPathLibraryExecutables>
+    <QtPathBinaries>C:/Qt/5.15.0/msvc2019_64/bin</QtPathBinaries>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Static|x64'" Label="QtSettings">
-    <QtInstall>qt-5.15.0-static-msvc2019-x86_64</QtInstall>
+    <QtInstall>qt-5.15.1-static-msvc2019-x86_64</QtInstall>
     <QtModules>core;network;gui;widgets</QtModules>
-    <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')">
     <Import Project="$(QtMsBuild)\qt.props" />
@@ -218,6 +216,7 @@ xcopy /y $(QTDIR)\plugins\imageformats\qjpegd.dll  $(OutDir)imageformats\</Comma
     <Link>
       <AdditionalDependencies>Urlmon.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
     <ClCompile>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -269,6 +268,7 @@ xcopy /y $(QTDIR)\plugins\imageformats\qjpeg.dll  $(OutDir)imageformats\</Comman
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Static|x64'">
     <Link>
       <AdditionalDependencies>Urlmon.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
     <ClCompile>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -305,6 +305,7 @@ xcopy /y $(QTDIR)\plugins\imageformats\qjpeg.dll  $(OutDir)imageformats\</Comman
     <ClInclude Include="CmdArg.hpp" />
     <ClInclude Include="Compress.h" />
     <ClInclude Include="cxxopts.hpp" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="ShortCut.h" />
     <QtMoc Include="framelesswindow\windowdragger.h" />
     <QtMoc Include="framelesswindow\framelesswindow.h" />
@@ -323,6 +324,12 @@ xcopy /y $(QTDIR)\plugins\imageformats\qjpeg.dll  $(OutDir)imageformats\</Comman
   <ItemGroup>
     <None Include="..\README.md" />
     <None Include="frameless_window_dark.pro" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GH_Injector_MSVC_2019_QT_5_15_0.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="gh_resource\GH Icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

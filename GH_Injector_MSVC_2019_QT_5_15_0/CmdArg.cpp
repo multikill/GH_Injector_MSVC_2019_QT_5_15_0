@@ -116,7 +116,7 @@ int CmdArg(int argc, char* argv[])
 	}
 	
 	std::string dll = result["file"].as<std::string>();	
-	const ARCH fileArch = getFileArch(dll.c_str());
+	const ARCH fileArch = getFileArchA(dll.c_str());
 	if(fileArch == ARCH::NONE)
 	{
 		std::cout << "File not found" << std::endl;
@@ -217,6 +217,8 @@ int CmdArg(int argc, char* argv[])
 
 	
 	data.GenerateErrorLog = true;
+
+	data.Timeout = 2000;
 
 	
 	int iInject = injectionLib.InjectFuncA(&data);

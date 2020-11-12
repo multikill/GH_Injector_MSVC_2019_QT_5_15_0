@@ -16,7 +16,7 @@ GuiProcess::GuiProcess(QWidget* parent)
 	// Maybe sometime we need this
 	delete ui.tree_process;
 	ui.tree_process = new MyTreeWidget(this);
-	ui.tree_process->headerItem()->setText(0, QString());
+	//ui.tree_process->headerItem()->setText(0, QString());
 	
 	ui.grid_proc->addWidget(ui.tree_process, 0, 0, 1, 3);
 
@@ -37,15 +37,46 @@ GuiProcess::GuiProcess(QWidget* parent)
 	connect(ui.btn_select, SIGNAL(clicked()), this, SLOT(proc_select()));
 	connect(ui.cb_session, SIGNAL(stateChanged(int)), this, SLOT(session_change()));
 	connect(ui.tree_process->header(), SIGNAL(sectionClicked(int)), this, SLOT(customSort(int)));
+	connect(ui.tree_process, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(on_treeView_doubleClicked(QModelIndex)));
 	//connect(header(), SIGNAL(sectionClicked(int)), this, SLOT(customSortByColumn(int)));
+
+	//dummy in case nothing was selected
+	ps = new Process_Struct();
+
+	installEventFilter(this);
+	ui.tree_process->installEventFilter(this);
 
 	for (int i = 0; i <= 3; i++)
 		ui.tree_process->resizeColumnToContents(i);
-
 }
 
 GuiProcess::~GuiProcess()
 {
+}
+
+bool GuiProcess::eventFilter(QObject * obj, QEvent * event)
+{
+	if (event->type() == QEvent::KeyPress)
+	{
+		if (obj == ui.tree_process)
+		{
+			QKeyEvent * keyEvent = static_cast<QKeyEvent*>(event);
+			if (keyEvent->key() == Qt::Key_Space || keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return)
+			{
+				proc_select();
+			}
+		}
+		else if (obj == this)
+		{
+			QKeyEvent * keyEvent = static_cast<QKeyEvent*>(event);
+			if (keyEvent->key() == Qt::Key_Escape)
+			{
+				proc_select(true);
+			}
+		}
+	}
+
+	return QObject::eventFilter(obj, event);
 }
 
 void GuiProcess::refresh_gui()
@@ -123,7 +154,7 @@ void GuiProcess::refresh_gui()
 			processCount++;
 		++it3;
 	}
-
+	
 	this->setWindowTitle("Select a process (" + QString::number(processCount) + ')');
 }
 
@@ -135,7 +166,7 @@ void GuiProcess::refresh_process()
 
 	ui.tree_process->clear();
 
-	for (auto proc : all_proc)
+	for (const auto &proc : all_proc)
 	{
 		QTreeWidgetItem* item = new QTreeWidgetItem(ui.tree_process);
 
@@ -171,7 +202,7 @@ void GuiProcess::name_change(const QString& str)
 	emit refresh_gui();
 }
 
-void GuiProcess::proc_select()
+void GuiProcess::proc_select(bool ignore)
 {
 	pss->txtFilter		= ui.txt_filter->text();
 	pss->cmbArch		= ui.cmb_arch->currentIndex();
@@ -184,9 +215,13 @@ void GuiProcess::proc_select()
 		ps->arch		= GuiMain::str_to_arch(item->text(3));
 		strcpy(ps->name, item->text(2).toStdString().c_str());
 	}
-	
+
+	if (ignore)
+	{
+		ps->pid = 0;
+	}
+
 	emit send_to_inj(pss, ps);
-	//this->hide();
 }
 
 void GuiProcess::customSort(int column)
@@ -206,6 +241,11 @@ void GuiProcess::customSort(int column)
 	emit refresh_process();
 }
 
+void GuiProcess::on_treeView_doubleClicked(const QModelIndex & index)
+{
+	proc_select();
+}
+
 void GuiProcess::get_from_inj(Process_State_Struct* procStateStruct, Process_Struct* procStruct)
 {
 	pss = procStateStruct;
@@ -215,6 +255,8 @@ void GuiProcess::get_from_inj(Process_State_Struct* procStateStruct, Process_Str
 	ui.cmb_arch->setCurrentIndex(pss->cmbArch);
 	ui.cb_session->setChecked(pss->cbSession);
 	memset(ps, 0, sizeof(Process_Struct));
+
+	ui.tree_process->setFocus();
 
 #ifndef _WIN64
 	ui.cmb_arch->setDisabled(true);

@@ -39,9 +39,8 @@ public:
 	static int str_to_arch(const QString str);
 	static QString arch_to_str(const int arch);
 
-	void setFramless(FramelessWindow* me);
-
 private:
+
 	Ui::GuiMainClass ui;
 	FramelessWindow framelessPicker;
 	FramelessWindow framelessScanner;
@@ -79,12 +78,18 @@ private:
 	InjectionLib InjLib;
 
 	std::string getVersionFromIE();
+
+	void keyPressEvent(QKeyEvent * k);
 	
 protected:
 	void dragEnterEvent(QDragEnterEvent* e);
 	void dragMoveEvent(QDragMoveEvent* e);
 	void dragLeaveEvent(QDragLeaveEvent* e);
-	void dropEvent(QDropEvent* e);
+	void dropEvent(QDropEvent* e); 
+	
+	bool eventFilter(QObject *obj, QEvent *event) override;
+	
+	void toggleSelected();
 
 public slots:
 	void get_from_picker(Process_State_Struct* procStateStruct, Process_Struct* procStruct);
@@ -130,7 +135,7 @@ private slots:
 
 	// Files
 	void add_file_dialog();
-	void add_file_to_list(QString str, QString active);
+	void add_file_to_list(QString str, bool active);
 	void remove_file();
 	void select_file();
 	void delay_inject();

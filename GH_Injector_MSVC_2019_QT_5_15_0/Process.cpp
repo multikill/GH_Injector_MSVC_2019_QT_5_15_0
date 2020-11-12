@@ -6,16 +6,17 @@
 #include <algorithm>
 #include <functional>
 #include "process.h"
+#include <codecvt>
 
 f_NtQueryInformationProcess p_NtQueryInformationProcess = nullptr;
 
-enum ARCH getFileArch(const char* szDllFile)
+enum ARCH getFileArch(const wchar_t* szDllFile)
 {
     BYTE* pSrcData = nullptr;
     IMAGE_NT_HEADERS* pOldNtHeader = nullptr;
     IMAGE_FILE_HEADER* pOldFileHeader = nullptr;
 
-    if (!GetFileAttributesA(szDllFile))
+    if (!GetFileAttributesW(szDllFile))
     {
         printf("File doesn't exist\n");
         return NONE;
@@ -73,6 +74,13 @@ enum ARCH getFileArch(const char* szDllFile)
 
     delete[] pSrcData;
     return NONE;
+}
+
+ARCH getFileArchA(const char * szDllFile)
+{
+    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> conv;
+    std::wstring ws(conv.from_bytes(szDllFile));
+    return getFileArch(ws.c_str());
 }
 
 enum ARCH getProcArch(const int pid)
@@ -386,5 +394,10 @@ BOOL StartProcess(const char* szExeFile)
     //printf("Success Process created");
 
     return TRUE;
+}
+
+bool FileExistsW(const wchar_t * szFile)
+{
+    return (GetFileAttributesW(szFile) != INVALID_FILE_ATTRIBUTES);
 }
 

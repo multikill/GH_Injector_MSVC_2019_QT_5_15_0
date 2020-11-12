@@ -8,6 +8,7 @@
 #include <qsettings.h>
 #include <qdir.h>
 #include <qmimedata.h>
+#include <QtGui>
 
 #include <urlmon.h>
 #include <fstream>
@@ -131,10 +132,9 @@ GuiMain::GuiMain(QWidget* parent)
 	hide_banner();
 	//check_online_version();
 
-	
 	if (!InjLib.Init())
 	{
-		QString failMsg = GH_INJ_MOD_NAMEA + QString("not found");
+		QString failMsg = GH_INJ_MOD_NAMEA + QString(" not found");
 		emit injec_status(false, failMsg);
 	}
 
@@ -154,6 +154,11 @@ GuiMain::GuiMain(QWidget* parent)
 		this->resize(winSize);
 	}
 
+	this->installEventFilter(this);
+	ui.tree_files->installEventFilter(this);
+	ui.txt_pid->setValidator(new QRegExpValidator(QRegExp("[0-9]+")));
+
+	txt_pid_change();
 
 	platformCheck();
 
@@ -219,6 +224,10 @@ std::string GuiMain::getVersionFromIE()
 	return strVer;
 }
 
+void GuiMain::keyPressEvent(QKeyEvent * k)
+{
+}
+
 void GuiMain::dragEnterEvent(QDragEnterEvent* e)
 {
 	if (e->mimeData()->hasUrls()) {
@@ -236,6 +245,53 @@ void GuiMain::dragLeaveEvent(QDragLeaveEvent* e)
 	int i = 42;
 }
 
+bool GuiMain::eventFilter(QObject * obj, QEvent * event)
+{
+	if (event->type() == QEvent::KeyPress)
+	{
+		if (obj == ui.tree_files)
+		{
+			QKeyEvent * keyEvent = static_cast<QKeyEvent*>(event);
+			if (keyEvent->key() == Qt::Key_Delete)
+			{
+				remove_file();
+			}
+			else if (keyEvent->key() == Qt::Key_Space)
+			{
+				toggleSelected();
+			}
+		}		
+	}
+
+	return QObject::eventFilter(obj, event);
+}
+
+void GuiMain::toggleSelected()
+{
+	QList<QTreeWidgetItem*> sel = ui.tree_files->selectedItems();
+	
+	bool all_selected = true;
+
+	for (auto i : sel)
+	{
+		if (i->checkState(0) != Qt::CheckState::Checked)
+		{
+			all_selected = false;
+			i->setCheckState(0, Qt::CheckState::Checked);
+		}
+	}
+
+	if (!all_selected)
+	{
+		return;
+	}
+
+	for (auto i : sel)
+	{
+		i->setCheckState(0, Qt::CheckState::Unchecked);
+	}
+}
+
 void GuiMain::dropEvent(QDropEvent* e)
 {
 	foreach(const QUrl & url, e->mimeData()->urls()) {
@@ -243,7 +299,7 @@ void GuiMain::dropEvent(QDropEvent* e)
 		//qDebug() << "Dropped file:" << fileName;
 		QFileInfo fi(fileName);
 		if (fi.completeSuffix() == QString("dll"))
-			add_file_to_list(fileName, "");
+			add_file_to_list(fileName, false);
 	}
 }
 
@@ -352,11 +408,11 @@ void GuiMain::btn_hook_scan_change()
 {
 	if (ui.rb_proc->isChecked())
 	{
-	if(ps_picker->arch)
-		ui.btn_hooks->setEnabled(true);
+		if(ps_picker->arch)
+			ui.btn_hooks->setEnabled(true);
 
-	else
-		ui.btn_hooks->setEnabled(false);
+		else
+			ui.btn_hooks->setEnabled(false);
 	}
 }
 
@@ -458,13 +514,14 @@ void GuiMain::color_setup()
 
 		darkSheet = ("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
 		/*ui.cb_auto->setStyleSheet()*/
+
 	}
 }
-
 void GuiMain::color_change()
 {
-	if (!this->parentWidget())
-	{
+	//idk this check is weird
+	//if (!this->parentWidget())
+	//{
 		if (lightMode)
 		{
 			qApp->setPalette(normalPalette);
@@ -483,7 +540,7 @@ void GuiMain::color_change()
 			pix_banner.loadFromData(getBanner(), getBannerLen(), "JPG");
 			ui.lbl_img->setPixmap(pix_banner);
 		}
-	}
+	//}
 }
 
 void GuiMain::load_banner()
@@ -538,21 +595,22 @@ void GuiMain::save_settings()
 	settings.beginWriteArray("FILES");
 	int i = 0;
 	QTreeWidgetItemIterator it(ui.tree_files);
-	while (*it)
+	for (; *it; ++it, ++i)
 	{
+		if (!FileExistsW((*it)->text(2).toStdWString().c_str()))
+			continue;
+
 		settings.setArrayIndex(i);
-		settings.setValue(QString::number(i), (*it)->text(2));
-		settings.setValue(QString::number(++i), (*it)->text(0));
-		++it; i++;
+		settings.setValue(QString::number(0), (*it)->text(2));
+		settings.setValue(QString::number(1), (*it)->checkState(0) == Qt::CheckState::Checked);
 	}
 	settings.endArray();
-
 
 	settings.beginWriteArray("PROCESS");
 	for (int i = 0; i < ui.cmb_proc->count(); i++)
 	{
 		settings.setArrayIndex(i);
-		settings.setValue(QString::number(i), ui.cmb_proc->itemText(i));
+		settings.setValue(QString::number(0), ui.cmb_proc->itemText(i));
 	}
 	settings.endArray();
 
@@ -581,8 +639,8 @@ void GuiMain::save_settings()
 	settings.setValue("DLLCOPY",		ui.cb_copy->isChecked());
 
 	// manual mapping
-	settings.setValue("SHIFTMODULE",	ui.cb_shift->isChecked());
 	settings.setValue("CLEANDIR",		ui.cb_clean->isChecked());
+	settings.setValue("INITCOOKIE",		ui.cb_cookie->isChecked());
 	settings.setValue("IMPORTS",		ui.cb_imports->isChecked());
 	settings.setValue("DELAYIMPORTS",	ui.cb_delay->isChecked());
 	settings.setValue("TLS",			ui.cb_tls->isChecked());
@@ -607,11 +665,6 @@ void GuiMain::save_settings()
 	settings.setValue("GEOMETRY", saveGeometry());	
 	// Broken on frameless window
 
-	// Selected DLL
-	for (QTreeWidgetItemIterator it2(ui.tree_files); (*it2) != nullptr; ++it2)
-		if ((*it2)->text(0) == "YES")
-			settings.setValue("ACTIVEDLL", (*it2)->text(1));
-
 	settings.endGroup();
 }
 
@@ -621,23 +674,29 @@ void GuiMain::load_settings()
 	if (!iniFile.exists())
 		return;
 
-
 	QSettings settings((QCoreApplication::applicationName() + ".ini"), QSettings::IniFormat);
 
-
 	int fileSize = settings.beginReadArray("FILES");
-	for (int i = 0; i < fileSize; ++++i) {
+	for (int i = 0; i < fileSize; ++i)
+	{
 		settings.setArrayIndex(i);
+		
+		auto path = settings.value(QString::number(0)).toString();
+
+		if (!FileExistsW(path.toStdWString().c_str()))
+			continue;
+
 		add_file_to_list(
-			settings.value(QString::number(i)).toString(),
-			settings.value(QString::number(i + 1)).toString());
+			path,
+			settings.value(QString::number(1)).toBool()
+		);
 	}
 	settings.endArray();
 
 	int procSize = settings.beginReadArray("PROCESS");
-	for (int i = 0; i < procSize; ++++i) {
+	for (int i = 0; i < procSize; ++i) {
 		settings.setArrayIndex(i);
-		ui.cmb_proc->addItem(settings.value(QString::number(i)).toString());
+		ui.cmb_proc->addItem(settings.value(QString::number(0)).toString());
 	}
 	settings.endArray();
 
@@ -666,8 +725,8 @@ void GuiMain::load_settings()
 	ui.cb_copy		->setChecked(settings.value("DLLCOPY").toBool());
 
 	// manual mapping
-	ui.cb_shift		->setChecked(settings.value("SHIFTMODULE").toBool());
 	ui.cb_clean		->setChecked(settings.value("CLEANDIR").toBool());
+	ui.cb_cookie	->setChecked(settings.value("INITCOOKIE").toBool());
 	ui.cb_imports	->setChecked(settings.value("IMPORTS").toBool());
 	ui.cb_delay		->setChecked(settings.value("DELAYIMPORTS").toBool());
 	ui.cb_tls		->setChecked(settings.value("TLS").toBool());
@@ -690,10 +749,6 @@ void GuiMain::load_settings()
 	lbl_hide_banner = settings.value("HIDEBANNER", false).toBool();
 	restoreState	(settings.value("STATE").toByteArray());
 	restoreGeometry	(settings.value("GEOMETRY").toByteArray());
-
-	for (QTreeWidgetItemIterator it2(ui.tree_files); (*it2) != nullptr; ++it2)
-		if ((*it2)->text(1) == settings.value("ACTIVEDLL").toString())
-			(*it2)->setText(0, "YES");
 
 	settings.endGroup();
 }
@@ -775,13 +830,16 @@ void GuiMain::add_file_dialog()
 	fDialog.setFileMode(QFileDialog::ExistingFiles);
 	fDialog.exec();
 
+	if (fDialog.selectedFiles().empty())
+		return;
+
 	for (auto l : fDialog.selectedFiles())
 		GuiMain::add_file_to_list(l, "");
 
-	lastPathStr = fDialog.windowFilePath();
+	lastPathStr = QFileInfo(fDialog.selectedFiles().first()).path();
 }
 
-void GuiMain::add_file_to_list(QString str, QString active)
+void GuiMain::add_file_to_list(QString str, bool active)
 {
 	// nop, not the same files
 	for (QTreeWidgetItemIterator it(ui.tree_files); (*it) != nullptr; ++it)
@@ -789,41 +847,38 @@ void GuiMain::add_file_to_list(QString str, QString active)
 			return;
 
 	QFileInfo fi(str);
+	int arch = (int)getFileArch(fi.absoluteFilePath().toStdWString().c_str());
+
+	if (arch == ARCH::NONE)
+		return;
+
 	QTreeWidgetItem* item = new QTreeWidgetItem(ui.tree_files);
 
-	item->setText(0, active);
+	item->setCheckState(0, Qt::CheckState::Unchecked);
 	item->setText(1, fi.fileName());
 	item->setText(2, fi.absoluteFilePath());
-	int arch = (int)getFileArch(fi.absoluteFilePath().toStdString().c_str());
 	item->setText(3, arch_to_str(arch));
+
+	if (active)
+	{
+		item->setCheckState(0, Qt::CheckState::Checked);
+	}
 }
 
 void GuiMain::remove_file()
 {
-	QTreeWidgetItem* item = ui.tree_files->currentItem();
-	delete item;
+	QList<QTreeWidgetItem*> item = ui.tree_files->selectedItems();
+
+	for (auto i : item)
+	{
+		delete i;
+	}
 }
 
 
 void GuiMain::select_file()
 {
-	QTreeWidgetItem* it2 = ui.tree_files->currentItem();
 
-	if(it2->text(0) == "")
-		it2->setText(0, "YES");
-	else
-		it2->setText(0, "");
-
-	return;
-	// Old
-	QTreeWidgetItemIterator it(ui.tree_files);
-	while (*it)
-	{
-		(*it)->setText(0, "");
-		++it;
-	}
-
-	it2->setText(0, "YES");
 }
 
 void GuiMain::delay_inject()
@@ -842,8 +897,8 @@ void GuiMain::delay_inject()
 
 void GuiMain::inject_file()
 {
-	INJECTIONDATAA data;
-	memset(&data, 0, sizeof(INJECTIONDATAA));
+	INJECTIONDATAW data;
+	memset(&data, 0, sizeof(INJECTIONDATAW));
 
 	//Process_Struct ps_inject;
 	//memset(&ps_inject, 0, sizeof(Process_Struct));
@@ -910,12 +965,11 @@ void GuiMain::inject_file()
 
 	if (data.Mode == INJECTION_MODE::IM_ManualMap)
 	{
-		if (ui.cb_shift->isChecked())		data.Flags |= INJ_MM_SHIFT_MODULE;
 		if (ui.cb_clean->isChecked())		data.Flags |= INJ_MM_CLEAN_DATA_DIR;
 		if (ui.cb_imports->isChecked())		data.Flags |= INJ_MM_RESOLVE_IMPORTS;
 		if (ui.cb_delay->isChecked())		data.Flags |= INJ_MM_RESOLVE_DELAY_IMPORTS;
 		if (ui.cb_tls->isChecked())			data.Flags |= INJ_MM_EXECUTE_TLS;
-		if (ui.cb_seh->isChecked())			data.Flags |= INJ_MM_ENABLE_SEH;
+		if (ui.cb_seh->isChecked())			data.Flags |= INJ_MM_ENABLE_EXCEPTIONS;
 		if (ui.cb_protection->isChecked())	data.Flags |= INJ_MM_SET_PAGE_PROTECTIONS;
 		if (ui.cb_main->isChecked())		data.Flags |= INJ_MM_RUN_DLL_MAIN;
 	}
@@ -933,57 +987,36 @@ void GuiMain::inject_file()
 	for (QTreeWidgetItemIterator it(ui.tree_files); (*it) != nullptr; ++it)
 	{
 		// Find Item
-		if ((*it)->text(0) != "YES")
+		if ((*it)->checkState(0) != Qt::CheckState::Checked)
 			continue;
 
 		// Convert String
 		QString fileStr	= (*it)->text(2);
-		for (int i = 0, j = 0; fileStr[i].toLatin1() != '\0'; i++, j++)
-		{
-			if (fileStr[i] == '/')
-				data.szDllPath[j] = '\\';
-			else
-				data.szDllPath[j] = fileStr[i].toLatin1();		
-		}
-		
-		// Check Existens
-		QFile qf(fileStr);
-		if (!qf.exists())
-		{
-			emit injec_status(false, "File not found");
-			return;
-		}
+		fileStr.replace('\/', '\\');
 
+		wcscpy_s(data.szDllPath, fileStr.toStdWString().c_str());
+		
 		// Check Architecture
 		fileType = str_to_arch((*it)->text(3));
 		if (fileType == NONE)
 		{
-			emit injec_status(false, "File Architecture invalid");
-			return;
+			continue;
 		}
-
-		// Check File Selected
-		if (fileType == NONE)
-		{
-			emit injec_status(false, "File not selected");
-			return;
-		}
-
 
 		if (processType != fileType || processType == NULL || fileType == NULL)
 		{
-			emit injec_status(false, "File and Process are incompatible");
-			return;
+			continue;
 		}
 
-
-		DWORD res = InjLib.InjectFuncA(&data);
+		data.Timeout = 2000;
+		DWORD res = InjLib.InjectFuncW(&data);
 		if (res)
 		{
 			QString failMsg = "Inject failed with 0x" + QString("%1").arg(res, 8, 16, QLatin1Char('0')).toUpper();
 			emit injec_status(false, failMsg);
-			return;
+			continue;
 		}
+
 		injCounter++;
 	}
 
@@ -1072,8 +1105,8 @@ void GuiMain::tooltip_change()
 	ui.cb_copy->setToolTipDuration(duration);
 
 	// manual mapping
-	ui.cb_shift->setToolTipDuration(duration);
 	ui.cb_clean->setToolTipDuration(duration);
+	ui.cb_cookie->setToolTipDuration(duration);
 	ui.cb_imports->setToolTipDuration(duration);
 	ui.cb_delay->setToolTipDuration(duration);
 	ui.cb_tls->setToolTipDuration(duration);
@@ -1153,7 +1186,7 @@ void GuiMain::open_log()
 			break;
 
 		// Find Item
-		if ((*it)->text(0) != "YES")
+		if ((*it)->checkState(0) != Qt::CheckState::Checked)
 			continue;
 
 		// Convert String
@@ -1244,12 +1277,11 @@ void GuiMain::open_log()
 	DWORD Flags = 0;
 	if (ui.cmb_load->currentIndex() == 3)
 	{
-		if (ui.cb_shift->isChecked())		Flags |= INJ_MM_SHIFT_MODULE;
 		if (ui.cb_clean->isChecked())		Flags |= INJ_MM_CLEAN_DATA_DIR;
 		if (ui.cb_imports->isChecked())		Flags |= INJ_MM_RESOLVE_IMPORTS;
 		if (ui.cb_delay->isChecked())		Flags |= INJ_MM_RESOLVE_DELAY_IMPORTS;
 		if (ui.cb_tls->isChecked())			Flags |= INJ_MM_EXECUTE_TLS;
-		if (ui.cb_seh->isChecked())			Flags |= INJ_MM_ENABLE_SEH;
+		if (ui.cb_seh->isChecked())			Flags |= INJ_MM_ENABLE_EXCEPTIONS;
 		if (ui.cb_protection->isChecked())	Flags |= INJ_MM_SET_PAGE_PROTECTIONS;
 		if (ui.cb_main->isChecked())		Flags |= INJ_MM_RUN_DLL_MAIN;
 
@@ -1280,7 +1312,6 @@ void GuiMain::open_log()
 
 void GuiMain::check_online_version()
 {
-
 	ui.btn_version->setText("check version...");
 	ui.btn_version->setEnabled(false);
 
