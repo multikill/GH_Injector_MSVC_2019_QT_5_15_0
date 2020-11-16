@@ -28,8 +28,9 @@ bool InjectionLib::Init()
     RestoreFunc = reinterpret_cast<f_RestoreInjectionFunctions>(GetProcAddress(hInjectionMod, "RestoreInjectionFunctions"));
 	GetVersionA = reinterpret_cast<f_GetVersionA>(GetProcAddress(hInjectionMod, "GetVersionA"));
 	GetVersionW = reinterpret_cast<f_GetVersionW>(GetProcAddress(hInjectionMod, "GetVersionW"));
+	GetSymbolState = reinterpret_cast<f_GetSymbolState>(GetProcAddress(hInjectionMod, "GetSymbolState"));
 
-    if (InjectA == nullptr || InjectW == nullptr || ValidateFunc == nullptr || RestoreFunc == nullptr || GetVersionA == nullptr || GetVersionW == nullptr)
+    if (InjectA == nullptr || InjectW == nullptr || ValidateFunc == nullptr || RestoreFunc == nullptr || GetVersionA == nullptr || GetVersionW == nullptr || GetSymbolState == nullptr)
         return false;
 
     return true;
@@ -140,4 +141,9 @@ int InjectionLib::RestoreHook(std::vector<std::string>& hList)
 	}
 
 	return 0;
+}
+
+bool InjectionLib::SymbolStatus()
+{
+	return (GetSymbolState() == 0);
 }

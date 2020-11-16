@@ -215,7 +215,7 @@
           </size>
          </property>
          <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Delays the injection (in ms).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="text">
           <string>0</string>
@@ -285,6 +285,9 @@
        </item>
        <item row="2" column="0" colspan="2">
         <widget class="QLabel" name="lbl_arch">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The architecture of the currently selected target process.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="text">
           <string>Architecture:</string>
          </property>
@@ -412,7 +415,7 @@
           <item row="1" column="1">
            <widget class="QCheckBox" name="cb_clock">
             <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Attempts to hide the thread from debuggers, fakes the startaddress and disables thread attach/detach calls.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Attempts to hide the thread from debuggers and fakes the startaddress.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="text">
              <string>Cloak thread</string>
@@ -453,7 +456,7 @@
           <item row="3" column="1">
            <widget class="QCheckBox" name="cb_protection">
             <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;sets page protections based on section characteristics&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Sets page protections based on section characteristics&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="text">
              <string>Set page protections</string>
@@ -466,7 +469,7 @@
           <item row="6" column="0">
            <widget class="QCheckBox" name="cb_imports">
             <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;resolves dll imports&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Resolves dll imports and builds the IAT&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="text">
              <string>Resolve imports</string>
@@ -479,7 +482,7 @@
           <item row="6" column="1">
            <widget class="QCheckBox" name="cb_tls">
             <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;executes TLS callbacks and initializes static TLS data&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Executes TLS callbacks and initializes static TLS data&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="text">
              <string>Execute TLS</string>
@@ -492,7 +495,7 @@
           <item row="7" column="0">
            <widget class="QCheckBox" name="cb_delay">
             <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;resolves delayed imports&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Resolves delayed imports on initialization&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="text">
              <string>Resolve delay imports</string>
@@ -505,7 +508,7 @@
           <item row="7" column="1">
            <widget class="QCheckBox" name="cb_main">
             <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;executes DllMain&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Executes the DllMain&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="text">
              <string>Run DllMain</string>
@@ -518,7 +521,7 @@
           <item row="3" column="0">
            <widget class="QCheckBox" name="cb_clean">
             <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;removes data from the dlls PE header&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Removes data from the dlls PE header&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="text">
              <string>Clean data directories</string>
@@ -528,7 +531,7 @@
           <item row="4" column="0">
            <widget class="QCheckBox" name="cb_cookie">
             <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Shifts the image by a randomly generated amount of bytes (manual mapping only).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Shifts the image by a randomly generated amount of bytes&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="text">
              <string>Initialize security cookie</string>
@@ -538,7 +541,7 @@
           <item row="4" column="1">
            <widget class="QCheckBox" name="cb_seh">
             <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;enables exception handling&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enables exception handling&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="text">
              <string>Enable exceptions</string>
@@ -618,7 +621,7 @@
        <item row="2" column="0">
         <widget class="QPushButton" name="btn_add">
          <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select files from disk to add them to the list or drag &amp;amp; drop them into the listview above.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select files from disk to add them to the list or drag &amp;amp; drop them into the list above.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="text">
           <string>&amp;Add files</string>

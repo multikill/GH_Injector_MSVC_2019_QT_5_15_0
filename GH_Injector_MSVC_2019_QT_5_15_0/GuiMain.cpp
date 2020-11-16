@@ -43,9 +43,9 @@ GuiMain::GuiMain(QWidget* parent)
 	connect(ui.btn_hooks, SIGNAL(clicked()), this, SLOT(hook_Scan()));
 
 	// Method, Cloaking, Advanced
-	connect(ui.cmb_load,   SIGNAL(currentIndexChanged(int)), this, SLOT(load_change(int)));
-	connect(ui.cmb_create, SIGNAL(currentIndexChanged(int)), this, SLOT(create_change(int)));
-	connect(ui.cb_main,	 SIGNAL(clicked()),				 this, SLOT(cb_main_clicked()));
+	connect(ui.cmb_load,	SIGNAL(currentIndexChanged(int)),	this, SLOT(load_change(int)));
+	connect(ui.cmb_create,	SIGNAL(currentIndexChanged(int)),	this, SLOT(create_change(int)));
+	connect(ui.cb_main,		SIGNAL(clicked()),					this, SLOT(cb_main_clicked()));
 
 	// Files
 	connect(ui.btn_add,    SIGNAL(clicked()), this, SLOT(add_file_dialog()));
@@ -158,26 +158,69 @@ GuiMain::GuiMain(QWidget* parent)
 	ui.tree_files->installEventFilter(this);
 	ui.txt_pid->setValidator(new QRegExpValidator(QRegExp("[0-9]+")));
 
-	txt_pid_change();
-
 	platformCheck();
 
 	bool status = SetDebugPrivilege(true);
+
+	//update both
+	cmb_proc_name_change();
+	txt_pid_change();
+
+	OnExit = false;
+	process_update_thread = std::thread(&GuiMain::UpdateProcess, this, 100);
 
 	int i = 42;
 }
 
 GuiMain::~GuiMain()
 {
+	OnExit = true;
+
+	process_update_thread.join();
+
 	if (this->parentWidget())
 		save_settings();
-	
+
 	delete gui_Picker;
 	delete ver_Manager;
 	delete t_Auto_Inj;
 	delete t_Delay_Inj;
 	delete pss;
 	delete ps_picker;
+}
+
+void GuiMain::UpdateProcess(int Interval)
+{
+	while (!OnExit)
+	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(Interval));
+
+		Process_Struct byName	= getProcessByName(ui.cmb_proc->currentText().toStdString().c_str());
+		Process_Struct byPID	= getProcessByPID(ui.txt_pid->text().toInt());
+
+		if (ui.rb_pid->isChecked())
+		{
+			if (byPID.pid && byPID.pid != byName.pid)
+			{
+				txt_pid_change();
+			}
+		}
+		else if (ui.rb_proc->isChecked())
+		{
+			if (byName.pid)
+			{
+				if (byName.pid != byPID.pid && strcmp(byName.name, byPID.name))
+				{
+					cmb_proc_name_change();
+				}				
+			}
+			else if (ui.txt_pid->text().toInt() != 0)
+			{
+				ui.txt_pid->setText("0");
+				ui.txt_arch->setText("---");
+			}
+		}
+	}
 }
 
 int GuiMain::str_to_arch(const QString str)
@@ -941,9 +984,9 @@ void GuiMain::inject_file()
 	
 	switch (ui.cmb_load->currentIndex())
 	{
-	case 1:  data.Mode = INJECTION_MODE::IM_LoadLibraryExW; break;
-	case 2:  data.Mode = INJECTION_MODE::IM_LdrLoadDll;		break;
-	case 3:  data.Mode = INJECTION_MODE::IM_LdrpLoadDll;    break;
+	case 1:  data.Mode = INJECTION_MODE::IM_LdrLoadDll;		break;
+	case 2:  data.Mode = INJECTION_MODE::IM_LdrpLoadDll;	break;
+	case 3:  data.Mode = INJECTION_MODE::IM_ManualMap;		break;
 	default: data.Mode = INJECTION_MODE::IM_LoadLibraryExW; break;
 	}
 
@@ -962,10 +1005,11 @@ void GuiMain::inject_file()
 	if (ui.cb_random->isChecked())			data.Flags |= INJ_SCRAMBLE_DLL_NAME;
 	if (ui.cb_copy->isChecked())			data.Flags |= INJ_LOAD_DLL_COPY;
 	if (ui.cb_hijack->isChecked())			data.Flags |= INJ_HIJACK_HANDLE;
-
+	
 	if (data.Mode == INJECTION_MODE::IM_ManualMap)
 	{
 		if (ui.cb_clean->isChecked())		data.Flags |= INJ_MM_CLEAN_DATA_DIR;
+		if (ui.cb_cookie->isChecked())		data.Flags |= INJ_MM_INIT_SECURITY_COOKIE;
 		if (ui.cb_imports->isChecked())		data.Flags |= INJ_MM_RESOLVE_IMPORTS;
 		if (ui.cb_delay->isChecked())		data.Flags |= INJ_MM_RESOLVE_DELAY_IMPORTS;
 		if (ui.cb_tls->isChecked())			data.Flags |= INJ_MM_EXECUTE_TLS;
@@ -979,11 +1023,16 @@ void GuiMain::inject_file()
 
 	if (!InjLib.LoadingStatus())
 	{
-		emit injec_status(false, "Library or Function not found!");
+		emit injec_status(false, "Library or function not found!");
+		return;
+	}
+
+	if (!InjLib.SymbolStatus())
+	{
+		emit injec_status(false, "PDB download not finished!");
 		return;
 	}
 	
-
 	for (QTreeWidgetItemIterator it(ui.tree_files); (*it) != nullptr; ++it)
 	{
 		// Find Item
@@ -1278,6 +1327,7 @@ void GuiMain::open_log()
 	if (ui.cmb_load->currentIndex() == 3)
 	{
 		if (ui.cb_clean->isChecked())		Flags |= INJ_MM_CLEAN_DATA_DIR;
+		if (ui.cb_cookie->isChecked())		Flags |= INJ_MM_INIT_SECURITY_COOKIE;
 		if (ui.cb_imports->isChecked())		Flags |= INJ_MM_RESOLVE_IMPORTS;
 		if (ui.cb_delay->isChecked())		Flags |= INJ_MM_RESOLVE_DELAY_IMPORTS;
 		if (ui.cb_tls->isChecked())			Flags |= INJ_MM_EXECUTE_TLS;

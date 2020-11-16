@@ -7,6 +7,8 @@
 #include <qtreewidget.h>
 #include <qevent.h>
 
+#include <thread>
+
 
 #include "framelesswindow/framelesswindow.h"
 #include "ui_GuiMain.h"
@@ -70,6 +72,9 @@ private:
 	bool		lbl_hide_banner;
 	UPDATE		update;
 
+	std::thread process_update_thread;
+	bool OnExit;
+
 	QTimer* t_Auto_Inj;
 	QTimer* t_Delay_Inj;
 
@@ -80,6 +85,7 @@ private:
 	std::string getVersionFromIE();
 
 	void keyPressEvent(QKeyEvent * k);
+	void UpdateProcess(int Interval = 100);
 	
 protected:
 	void dragEnterEvent(QDragEnterEvent* e);

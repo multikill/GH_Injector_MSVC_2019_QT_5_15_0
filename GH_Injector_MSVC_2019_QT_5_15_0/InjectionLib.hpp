@@ -17,6 +17,7 @@ public:
 	DWORD InjectFuncW (INJECTIONDATAW* pData);
 	int ScanHook(int pid, std::vector<std::string>& hList);
 	int RestoreHook(std::vector<std::string>& hList);
+	bool SymbolStatus();
 
 private:
 	HookInfo info[30];
@@ -32,4 +33,5 @@ private:
 	f_RestoreInjectionFunctions RestoreFunc;
 	f_GetVersionA GetVersionA;
 	f_GetVersionW GetVersionW;
+	f_GetSymbolState GetSymbolState;
 };
