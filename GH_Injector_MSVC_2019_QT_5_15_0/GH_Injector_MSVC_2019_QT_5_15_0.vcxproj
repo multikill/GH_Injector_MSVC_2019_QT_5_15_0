@@ -52,6 +52,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Static|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
@@ -117,14 +118,16 @@
     <QtModules>core;network;gui;widgets</QtModules>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
-    <QtInstall>msvc2019_64</QtInstall>
+    <QtInstall>qt-5.15.1-static-msvc2019-x86_64</QtInstall>
     <QtModules>core;network;gui;widgets</QtModules>
     <QtPathLibraryExecutables>C:/Qt/5.15.0/msvc2019_64/bin</QtPathLibraryExecutables>
     <QtPathBinaries>C:/Qt/5.15.0/msvc2019_64/bin</QtPathBinaries>
+    <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Static|x64'" Label="QtSettings">
     <QtInstall>qt-5.15.1-static-msvc2019-x86_64</QtInstall>
     <QtModules>core;network;gui;widgets</QtModules>
+    <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')">
     <Import Project="$(QtMsBuild)\qt.props" />
@@ -268,7 +271,8 @@ xcopy /y $(QTDIR)\plugins\imageformats\qjpeg.dll  $(OutDir)imageformats\</Comman
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Static|x64'">
     <Link>
       <AdditionalDependencies>Urlmon.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+      <UACExecutionLevel>AsInvoker</UACExecutionLevel>
+      <UACUIAccess>false</UACUIAccess>
     </Link>
     <ClCompile>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -280,6 +284,7 @@ xcopy /y $(QTDIR)\plugins\imageformats\qjpeg.dll  $(OutDir)imageformats\</Comman
     <ClCompile Include="MyTreeWidget.cpp" />
     <ClCompile Include="Process.cpp" />
     <ClCompile Include="ShortCut.cpp" />
+    <ClCompile Include="test_window.cpp" />
     <ClCompile Include="Zip.cpp" />
     <QtRcc Include="mainwindow.qrc" />
     <QtUic Include="framelesswindow\framelesswindow.ui" />
@@ -313,6 +318,7 @@ xcopy /y $(QTDIR)\plugins\imageformats\qjpeg.dll  $(OutDir)imageformats\</Comman
     <ClInclude Include="Injection.h" />
     <ClInclude Include="InjectionLib.hpp" />
     <ClInclude Include="Process.h" />
+    <ClInclude Include="test_window.h" />
     <ClInclude Include="Zip.h" />
     <QtMoc Include="MyTreeWidget.h" />
     <QtMoc Include="GuiScanHook.h" />
@@ -330,6 +336,7 @@ xcopy /y $(QTDIR)\plugins\imageformats\qjpeg.dll  $(OutDir)imageformats\</Comman
   </ItemGroup>
   <ItemGroup>
     <Image Include="gh_resource\GH Icon.ico" />
+    <Image Include="gh_resource\icon2.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

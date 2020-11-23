@@ -40,10 +40,12 @@ public:
 
 	static int str_to_arch(const QString str);
 	static QString arch_to_str(const int arch);
+	Ui::GuiMainClass ui;
+
+	void add_file_to_list(QString str, bool active);
 
 private:
 
-	Ui::GuiMainClass ui;
 	FramelessWindow framelessPicker;
 	FramelessWindow framelessScanner;
 	GuiProcess* gui_Picker = NULL;
@@ -71,10 +73,11 @@ private:
 	bool		lightMode;
 	bool		lbl_hide_banner;
 	UPDATE		update;
+	bool		onReset;
 
 	std::thread process_update_thread;
 	bool OnExit;
-
+	
 	QTimer* t_Auto_Inj;
 	QTimer* t_Delay_Inj;
 
@@ -91,7 +94,7 @@ protected:
 	void dragEnterEvent(QDragEnterEvent* e);
 	void dragMoveEvent(QDragMoveEvent* e);
 	void dragLeaveEvent(QDragLeaveEvent* e);
-	void dropEvent(QDropEvent* e); 
+	//void dropEvent(QDropEvent* e); 
 	
 	bool eventFilter(QObject *obj, QEvent *event) override;
 	
@@ -141,7 +144,6 @@ private slots:
 
 	// Files
 	void add_file_dialog();
-	void add_file_to_list(QString str, bool active);
 	void remove_file();
 	void select_file();
 	void delay_inject();

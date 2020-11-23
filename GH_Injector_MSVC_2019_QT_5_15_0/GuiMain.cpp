@@ -30,6 +30,10 @@ GuiMain::GuiMain(QWidget* parent)
 {
 	ui.setupUi(this);
 
+	parent->layout()->setSizeConstraint(QLayout::SetFixedSize);
+	ui.grp_settings->layout()->setSizeConstraint(QLayout::SetFixedSize);
+	ui.tree_files->setFixedWidth(800);
+
 	// Settings
 	connect(ui.rb_proc,  SIGNAL(clicked()), this, SLOT(rb_process_set()));
 	connect(ui.rb_pid,   SIGNAL(clicked()), this, SLOT(rb_pid_set()));
@@ -112,14 +116,14 @@ GuiMain::GuiMain(QWidget* parent)
 	connect(t_Auto_Inj, SIGNAL(timeout()), this, SLOT(auto_loop_inject()));
 	connect(t_Delay_Inj,SIGNAL(timeout()), this, SLOT(inject_file()));
 
-	
-	// Resize Column
-	for (int i = 0; i <= 3; i++)
-		ui.tree_files->resizeColumnToContents(i);
+
+	ui.tree_files->setColumnWidth(0, 50);
+	ui.tree_files->setColumnWidth(1, 178);
+	ui.tree_files->setColumnWidth(2, 470);
+	ui.tree_files->setColumnWidth(3, 100);
+
 	ui.tree_files->clear();
-
-	setAcceptDrops(true);
-
+			
 	load_settings();
 	color_setup();
 	color_change();
@@ -273,6 +277,7 @@ void GuiMain::keyPressEvent(QKeyEvent * k)
 
 void GuiMain::dragEnterEvent(QDragEnterEvent* e)
 {
+	printf("dragEnterEvent\n");
 	if (e->mimeData()->hasUrls()) {
 		e->acceptProposedAction();
 	}
@@ -280,11 +285,13 @@ void GuiMain::dragEnterEvent(QDragEnterEvent* e)
 
 void GuiMain::dragMoveEvent(QDragMoveEvent* e)
 {
+	printf("dragMoveEvent\n");
 	int i = 42;
 }
 
 void GuiMain::dragLeaveEvent(QDragLeaveEvent* e)
 {
+	printf("dragLeaveEvent\n");
 	int i = 42;
 }
 
@@ -335,16 +342,16 @@ void GuiMain::toggleSelected()
 	}
 }
 
-void GuiMain::dropEvent(QDropEvent* e)
-{
-	foreach(const QUrl & url, e->mimeData()->urls()) {
-		QString fileName = url.toLocalFile();
-		//qDebug() << "Dropped file:" << fileName;
-		QFileInfo fi(fileName);
-		if (fi.completeSuffix() == QString("dll"))
-			add_file_to_list(fileName, false);
-	}
-}
+//void GuiMain::dropEvent(QDropEvent* e)
+//{
+//	foreach(const QUrl & url, e->mimeData()->urls()) {
+//		QString fileName = url.toLocalFile();
+//		//qDebug() << "Dropped file:" << fileName;
+//		QFileInfo fi(fileName);
+//		if (fi.completeSuffix() == QString("dll"))
+//			add_file_to_list(fileName, false);
+//	}
+//}
 
 void GuiMain::platformCheck()
 {
@@ -601,6 +608,10 @@ void GuiMain::hide_banner()
 
 void GuiMain::reset_settings()
 {
+	onReset = true;
+
+	QFileDialog fDialog(this, "Select dll files", QApplication::applicationDirPath(), "Dynamic Link Libraries (*.dll)");
+	
 	// delete file
 	QString iniName = QCoreApplication::applicationName() + ".ini";
 	QFile iniFile(iniName);
@@ -633,6 +644,13 @@ void GuiMain::hook_Scan()
 
 void GuiMain::save_settings()
 {
+	if (onReset)
+	{
+		onReset = false;
+
+		return;
+	}
+
 	QSettings settings((QCoreApplication::applicationName() + ".ini"), QSettings::IniFormat);
 
 	settings.beginWriteArray("FILES");
@@ -799,7 +817,7 @@ void GuiMain::load_settings()
 void GuiMain::load_change(int i)
 {
 	INJECTION_MODE mode = (INJECTION_MODE)ui.cmb_load->currentIndex();
-
+	
 	switch (mode)
 	{
 		case INJECTION_MODE::IM_LoadLibraryExW:
@@ -921,7 +939,7 @@ void GuiMain::remove_file()
 
 void GuiMain::select_file()
 {
-
+	//works open explorer at filepath
 }
 
 void GuiMain::delay_inject()

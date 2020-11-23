@@ -92,6 +92,9 @@
     <ClCompile Include="ShortCut.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test_window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="mainwindow.qrc" />
@@ -128,6 +131,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="test_window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -173,6 +179,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="gh_resource\GH Icon.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="gh_resource\icon2.ico">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

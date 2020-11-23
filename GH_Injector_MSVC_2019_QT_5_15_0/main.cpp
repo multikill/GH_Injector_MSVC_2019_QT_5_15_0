@@ -6,6 +6,8 @@
 #include "CmdArg.hpp"
 #include "InjectionLib.hpp"
 
+#include "test_window.h"
+
 #ifdef _DEBUG
 
 #define DEBUG_CMD_ARG
@@ -15,15 +17,17 @@ char* argument_value3[]{ "val1", "-f", "C:\\temp\\HelloWorld_x64.dll", "-p", "no
 
 #endif
 
-
 int main(int argc, char* argv[]) {
+
+	AllocConsole();
+	FILE * pFile = nullptr;
+	freopen_s(&pFile, "CONOUT$", "w", stdout);
 
 #ifdef DEBUG_CMD_ARG
 	int res = CmdArg(ARRAYSIZE(argument_value1), argument_value1);
 
 #else	
 	int res = CmdArg(argc, argv);
-
 #endif //DEBUG CMD
 
 	if (res > 1)
@@ -44,10 +48,10 @@ int main(int argc, char* argv[]) {
 
 		QApplication a(argc, argv);
 
-
 		FramelessWindow framelessWindow;
 		if (!res)
 		{
+
 			DarkStyle* dark = new DarkStyle;
 			QApplication::setStyle(dark);
 			QApplication::setPalette(QApplication::style()->standardPalette());
@@ -56,8 +60,17 @@ int main(int argc, char* argv[]) {
 			framelessWindow.setWindowTitle("GH Injector");
 			framelessWindow.setWindowIcon(QIcon(":/GuiMain/gh_resource/GH Icon.ico"));
 			GuiMain* MainWindow = new GuiMain(&framelessWindow);
+			MainWindow->statusBar()->setSizeGripEnabled(false);
+			
+			HWND hDragnDrop = CreateDragDropWindow((HWND)framelessWindow.winId(), MainWindow);
+
+			printf("DragnDrop window created: %p\n", hDragnDrop);
+						
 			framelessWindow.setContent(MainWindow);
 			framelessWindow.show();
+
+			ShowWindow(hDragnDrop, SW_SHOW);
+
 		}
 		// Old performance style
 		else
@@ -68,6 +81,8 @@ int main(int argc, char* argv[]) {
 
 
 		currentExitCode = a.exec();
+
+		CloseDragDropWindow();
 
 		int i = 42;
 	} while (currentExitCode == GuiMain::EXIT_CODE_REBOOT);

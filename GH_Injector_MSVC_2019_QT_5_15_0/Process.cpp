@@ -61,6 +61,13 @@ enum ARCH getFileArch(const wchar_t* szDllFile)
     pOldNtHeader = reinterpret_cast<IMAGE_NT_HEADERS*>(pSrcData + reinterpret_cast<IMAGE_DOS_HEADER*>(pSrcData)->e_lfanew);
     pOldFileHeader = &pOldNtHeader->FileHeader;
 
+    if (!(pOldFileHeader->Characteristics & IMAGE_FILE_DLL))
+    {
+        printf("Invalid file\n");
+        delete[] pSrcData;
+        return NONE;
+    }
+
     if (pOldFileHeader->Machine == IMAGE_FILE_MACHINE_AMD64)
     {
         delete[] pSrcData;
