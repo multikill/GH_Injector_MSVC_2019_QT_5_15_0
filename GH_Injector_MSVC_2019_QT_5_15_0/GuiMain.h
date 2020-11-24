@@ -74,6 +74,7 @@ private:
 	bool		lbl_hide_banner;
 	UPDATE		update;
 	bool		onReset;
+	bool		onUserInput;
 
 	std::thread process_update_thread;
 	bool OnExit;

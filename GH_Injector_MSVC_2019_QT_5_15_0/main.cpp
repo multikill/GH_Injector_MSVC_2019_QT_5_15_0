@@ -6,7 +6,7 @@
 #include "CmdArg.hpp"
 #include "InjectionLib.hpp"
 
-#include "test_window.h"
+#include "DragDropWindow.h"
 
 #ifdef _DEBUG
 

@@ -92,7 +92,7 @@
     <ClCompile Include="ShortCut.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="test_window.cpp">
+    <ClCompile Include="DragDropWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -133,7 +133,7 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="test_window.h">
+    <ClInclude Include="DragDropWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

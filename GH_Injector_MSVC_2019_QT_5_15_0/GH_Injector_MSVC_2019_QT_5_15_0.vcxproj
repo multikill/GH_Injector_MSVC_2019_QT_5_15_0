@@ -284,7 +284,7 @@ xcopy /y $(QTDIR)\plugins\imageformats\qjpeg.dll  $(OutDir)imageformats\</Comman
     <ClCompile Include="MyTreeWidget.cpp" />
     <ClCompile Include="Process.cpp" />
     <ClCompile Include="ShortCut.cpp" />
-    <ClCompile Include="test_window.cpp" />
+    <ClCompile Include="DragDropWindow.cpp" />
     <ClCompile Include="Zip.cpp" />
     <QtRcc Include="mainwindow.qrc" />
     <QtUic Include="framelesswindow\framelesswindow.ui" />
@@ -318,7 +318,7 @@ xcopy /y $(QTDIR)\plugins\imageformats\qjpeg.dll  $(OutDir)imageformats\</Comman
     <ClInclude Include="Injection.h" />
     <ClInclude Include="InjectionLib.hpp" />
     <ClInclude Include="Process.h" />
-    <ClInclude Include="test_window.h" />
+    <ClInclude Include="DragDropWindow.h" />
     <ClInclude Include="Zip.h" />
     <QtMoc Include="MyTreeWidget.h" />
     <QtMoc Include="GuiScanHook.h" />

@@ -38,8 +38,6 @@ GuiMain::GuiMain(QWidget* parent)
 	connect(ui.rb_proc,  SIGNAL(clicked()), this, SLOT(rb_process_set()));
 	connect(ui.rb_pid,   SIGNAL(clicked()), this, SLOT(rb_pid_set()));
 	connect(ui.btn_proc, SIGNAL(clicked()), this, SLOT(btn_pick_process_click()));
-	connect(ui.cmb_proc, SIGNAL(currentTextChanged(const QString&)), this, SLOT(cmb_proc_name_change()));
-	connect(ui.txt_pid,  SIGNAL(textChanged(const QString&)),		 this, SLOT(txt_pid_change()));
 
 	// Auto, Reset, Color
 	connect(ui.cb_auto,   SIGNAL(clicked()), this, SLOT(auto_inject()));
@@ -90,6 +88,7 @@ GuiMain::GuiMain(QWidget* parent)
 		framelessScanner.setWindowIcon(QIcon(":/GuiMain/gh_resource/GH Icon.ico"));
 	}
 	
+	onReset = false;
 
 	t_Delay_Inj->setSingleShot(true);
 	pss->cbSession = true;
@@ -161,14 +160,11 @@ GuiMain::GuiMain(QWidget* parent)
 	this->installEventFilter(this);
 	ui.tree_files->installEventFilter(this);
 	ui.txt_pid->setValidator(new QRegExpValidator(QRegExp("[0-9]+")));
+	ui.txt_pid->installEventFilter(this);
 
 	platformCheck();
 
 	bool status = SetDebugPrivilege(true);
-
-	//update both
-	cmb_proc_name_change();
-	txt_pid_change();
 
 	OnExit = false;
 	process_update_thread = std::thread(&GuiMain::UpdateProcess, this, 100);
@@ -195,18 +191,56 @@ GuiMain::~GuiMain()
 
 void GuiMain::UpdateProcess(int Interval)
 {
+	QTimer t;
+
 	while (!OnExit)
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(Interval));
 
+		if (onUserInput)
+		{
+			t.setInterval(std::chrono::milliseconds(5000));
+			t.start();
+
+			onUserInput = false;
+		}
+
+		int raw = ui.txt_pid->text().toInt();
 		Process_Struct byName	= getProcessByName(ui.cmb_proc->currentText().toStdString().c_str());
 		Process_Struct byPID	= getProcessByPID(ui.txt_pid->text().toInt());
 
 		if (ui.rb_pid->isChecked())
 		{
-			if (byPID.pid && byPID.pid != byName.pid)
+			if (byPID.pid)
 			{
-				txt_pid_change();
+				if (byPID.pid != byName.pid && stricmp(byPID.fullName, byName.fullName))
+				{
+					txt_pid_change();
+				}
+
+				if (t.isActive())
+				{
+					t.stop();
+				}
+			}
+			else if (t.isActive())
+			{
+				ui.cmb_proc->setToolTip("");
+				ui.txt_pid->setToolTip("");
+			}
+			else
+			{
+				if (byName.pid)
+				{
+					cmb_proc_name_change();
+				}
+				else if (raw)
+				{
+					ui.txt_pid->setText("0");
+					ui.txt_arch->setText("---");
+					ui.txt_pid->setToolTip("");
+					ui.cmb_proc->setToolTip("");
+				}
 			}
 		}
 		else if (ui.rb_proc->isChecked())
@@ -222,6 +256,8 @@ void GuiMain::UpdateProcess(int Interval)
 			{
 				ui.txt_pid->setText("0");
 				ui.txt_arch->setText("---");
+				ui.txt_pid->setToolTip("");
+				ui.cmb_proc->setToolTip("");
 			}
 		}
 	}
@@ -310,7 +346,16 @@ bool GuiMain::eventFilter(QObject * obj, QEvent * event)
 			{
 				toggleSelected();
 			}
-		}		
+		}
+		else if (obj == ui.txt_pid)
+		{
+			QKeyEvent * keyEvent = static_cast<QKeyEvent*>(event);
+			if (keyEvent->key() >= Qt::Key_0 && keyEvent->key() <= Qt::Key_9 || keyEvent->key() == Qt::Key_Backspace || keyEvent->key() == Qt::Key_Delete || keyEvent->key() == Qt::Key_Space)
+			{
+				printf("triggered event handler\n");
+				onUserInput = true;
+			}
+		}
 	}
 
 	return QObject::eventFilter(obj, event);
@@ -341,17 +386,6 @@ void GuiMain::toggleSelected()
 		i->setCheckState(0, Qt::CheckState::Unchecked);
 	}
 }
-
-//void GuiMain::dropEvent(QDropEvent* e)
-//{
-//	foreach(const QUrl & url, e->mimeData()->urls()) {
-//		QString fileName = url.toLocalFile();
-//		//qDebug() << "Dropped file:" << fileName;
-//		QFileInfo fi(fileName);
-//		if (fi.completeSuffix() == QString("dll"))
-//			add_file_to_list(fileName, false);
-//	}
-//}
 
 void GuiMain::platformCheck()
 {
@@ -426,31 +460,53 @@ void GuiMain::btn_pick_process_click()
 
 void GuiMain::cmb_proc_name_change()
 {
-	if (ui.rb_proc->isChecked())
+	QString proc = ui.cmb_proc->currentText();
+	Process_Struct pl = getProcessByName(proc.toStdString().c_str());
+
+	if (!pl.pid)
 	{
-		QString proc = ui.cmb_proc->currentText();
-		Process_Struct pl = getProcessByName(proc.toStdString().c_str());
+		return;
+	}
 
-		memcpy(ps_picker, &pl, sizeof(Process_Struct));
-		ui.txt_pid->setText(QString::number(ps_picker->pid));
-		ui.txt_arch->setText(GuiMain::arch_to_str(ps_picker->arch));
+	memcpy(ps_picker, &pl, sizeof(Process_Struct));
 
-		int index = ui.cmb_proc->findText(proc);
-		if(index == -1 && ps_picker->pid) // check exists
-			ui.cmb_proc->addItem(ps_picker->name);
+	ui.txt_pid->setText(QString::number(pl.pid));
+	QString new_pid = QString::asprintf("0x%08X", pl.pid);
+	ui.txt_pid->setToolTip(new_pid);
+
+	ui.cmb_proc->setToolTip(pl.fullName);
+
+	ui.txt_arch->setText(GuiMain::arch_to_str(pl.arch));
+
+	if (ui.cmb_proc->findText(pl.name) == -1)
+	{
+		ui.cmb_proc->addItem(pl.name);
 	}
 }
 
 void GuiMain::txt_pid_change()
 {
-	if (ui.rb_pid->isChecked())
+	QString s_PID = ui.txt_pid->text();
+	Process_Struct pl = getProcessByPID(s_PID.toInt());
+
+	if (!pl.pid)
 	{
-		Process_Struct pl = getProcessByPID(ui.txt_pid->text().toInt());
+		return;
+	}
 
-		memcpy(ps_picker, &pl, sizeof(Process_Struct));
-		ui.cmb_proc->setCurrentText(ps_picker->name);
-		ui.txt_arch->setText(GuiMain::arch_to_str(ps_picker->arch));
+	memcpy(ps_picker, &pl, sizeof(Process_Struct));
 
+	QString new_pid = QString::asprintf("0x%08X", pl.pid);
+	ui.txt_pid->setToolTip(new_pid);
+
+	ui.cmb_proc->setCurrentText(pl.name);
+	ui.cmb_proc->setToolTip(pl.fullName);
+
+	ui.txt_arch->setText(GuiMain::arch_to_str(pl.arch));
+
+	if (ui.cmb_proc->findText(pl.name) == -1)
+	{
+		ui.cmb_proc->addItem(pl.name);
 	}
 }
 
@@ -635,9 +691,6 @@ void GuiMain::hook_Scan()
 		framelessScanner.show();
 	else
 		gui_Scanner->show();
-
-	cmb_proc_name_change();
-	txt_pid_change();
 	
 	emit send_to_scan_hook(ps_picker->pid, 0);
 }

@@ -1,4 +1,4 @@
-#include "test_window.h"
+#include "DragDropWindow.h"
 #include "resource.h"
 
 #include <iostream>
@@ -193,7 +193,7 @@ HWND CreateDragDropWindow(HWND hMainWnd, GuiMain * pGui)
 
 	if (!RegisterClassEx(&wc))
 	{
-		printf("RegisterClassEx fucked: %08X\n", GetLastError());
+		printf("RegisterClassEx failed: %08X\n", GetLastError());
 
 		return 0;
 	}
@@ -204,14 +204,14 @@ HWND CreateDragDropWindow(HWND hMainWnd, GuiMain * pGui)
 	g_MainWndProc = reinterpret_cast<WNDPROC>(GetWindowLongPtr(hMainWnd, GWLP_WNDPROC));
 	if (!g_MainWndProc)
 	{
-		printf("GetWindowLongPtr fucked: %08X\n", GetLastError());
+		printf("GetWindowLongPtr failed: %08X\n", GetLastError());
 
 		return 0;
 	}
 
 	if (!SetWindowLongPtr(hMainWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(Proxy_WndProc)))
 	{
-		printf("SetWindowLongPtr fucked: %08X\n", GetLastError());
+		printf("SetWindowLongPtr failed: %08X\n", GetLastError());
 
 		return 0;
 	}
@@ -219,7 +219,7 @@ HWND CreateDragDropWindow(HWND hMainWnd, GuiMain * pGui)
 	g_hUpdateNow = CreateEvent(nullptr, TRUE, FALSE, nullptr);
 	if (!g_hUpdateNow)
 	{
-		printf("CreateEvent fucked: %08X\n", GetLastError());
+		printf("CreateEvent failed: %08X\n", GetLastError());
 
 		return 0;
 	}
@@ -227,7 +227,7 @@ HWND CreateDragDropWindow(HWND hMainWnd, GuiMain * pGui)
 	HWND hWnd = CreateWindowExW(WS_EX_ACCEPTFILES | WS_EX_TOOLWINDOW, g_szClassName, nullptr, WS_BORDER | WS_POPUP, -1000000, -1000000, 30, 30, NULL, NULL, hInstance, nullptr);
 	if (hWnd == NULL)
 	{
-		printf("CreateWindowExW fucked: %08X\n", GetLastError());
+		printf("CreateWindowExW failed: %08X\n", GetLastError());
 
 		return 0;
 	}
@@ -237,7 +237,7 @@ HWND CreateDragDropWindow(HWND hMainWnd, GuiMain * pGui)
 	g_hIcon = (HICON)LoadImage(GetModuleHandle(0), MAKEINTRESOURCE(IDI_ICON2), IMAGE_ICON, 40, 40, LR_LOADTRANSPARENT);
 	if (!g_hIcon)
 	{
-		printf("hIcon fucked: %08X\n", GetLastError());
+		printf("LoadImage failed: %08X\n", GetLastError());
 
 		return 0;
 	}
@@ -245,14 +245,14 @@ HWND CreateDragDropWindow(HWND hMainWnd, GuiMain * pGui)
 	g_hWndDC = GetDC(hWnd);
 	if (!g_hWndDC)
 	{
-		printf("dc fucked: %08X\n", GetLastError());
+		printf("GetDC failed: %08X\n", GetLastError());
 
 		return 0;
 	}
 
 	if (!DrawIcon(g_hWndDC, 0, 0, g_hIcon))
 	{
-		printf("DrawIcon fucked: %08X\n", GetLastError());
+		printf("DrawIcon failed: %08X\n", GetLastError());
 	}
 
 	ChangeWindowMessageFilterEx(hWnd, WM_DROPFILES, MSGFLT_ALLOW, nullptr);
