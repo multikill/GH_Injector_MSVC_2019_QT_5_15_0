@@ -77,9 +77,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)framelesswindow;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)framelesswindow;$(IncludePath);C:\Qt\5.15.0\msvc2019\include;C:\Qt\5.15.0\qt-5.15.0-static-msvc2019-x86_64\include</IncludePath>
     <OutDir>$(SolutionDir)$(PlatformTarget)\$(Configuration)\</OutDir>
     <IntDir>$(PlatformTarget)\$(Configuration)\</IntDir>
+    <LibraryPath>C:\Qt\5.15.0\qt-5.15.0-static-msvc2019-x86_64\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(ProjectDir)framelesswindow;$(IncludePath)</IncludePath>
@@ -105,9 +106,9 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="QtSettings">
-    <QtInstall>msvc2019</QtInstall>
+    <QtInstall>qt-5.15.0-static-msvc2019-x86_64</QtInstall>
     <QtModules>core;network;gui;widgets</QtModules>
-    <QtBuildConfig>debug</QtBuildConfig>
+    <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'" Label="QtSettings">
     <QtInstall>msvc2019</QtInstall>
@@ -118,14 +119,12 @@
     <QtModules>core;network;gui;widgets</QtModules>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
-    <QtInstall>qt-5.15.1-static-msvc2019-x86_64</QtInstall>
+    <QtInstall>msvc2019_64</QtInstall>
     <QtModules>core;network;gui;widgets</QtModules>
-    <QtPathLibraryExecutables>C:/Qt/5.15.0/msvc2019_64/bin</QtPathLibraryExecutables>
-    <QtPathBinaries>C:/Qt/5.15.0/msvc2019_64/bin</QtPathBinaries>
-    <QtBuildConfig>debug</QtBuildConfig>
+    <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Static|x64'" Label="QtSettings">
-    <QtInstall>qt-5.15.1-static-msvc2019-x86_64</QtInstall>
+    <QtInstall>qt-5.15.0-static-msvc2019-x86_64</QtInstall>
     <QtModules>core;network;gui;widgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
@@ -201,10 +200,7 @@
     <ClCompile>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
-    <Link>
-      <AdditionalDependencies>Urlmon.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Link>
+    <Link />
     <PostBuildEvent>
       <Command>xcopy /y $(QtDllPath)\Qt5Cored.dll $(OutDir)
 xcopy /y $(QtDllPath)\Qt5Guid.dll $(OutDir)
@@ -214,6 +210,9 @@ xcopy /y $(QtDllPath)\Qt5Cored.dll $(OutDir)
 xcopy /y $(QTDIR)\plugins\platforms\qwindowsd.dll  $(OutDir)platforms\
 xcopy /y $(QTDIR)\plugins\imageformats\qjpegd.dll  $(OutDir)imageformats\</Command>
     </PostBuildEvent>
+    <Link>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Link>
@@ -237,6 +236,7 @@ xcopy /y $(QTDIR)\plugins\imageformats\qjpegd.dll  $(OutDir)imageformats\</Comma
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Link>
       <AdditionalDependencies>Urlmon.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
     <ClCompile>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -254,6 +254,7 @@ xcopy /y $(QTDIR)\plugins\imageformats\qjpeg.dll  $(OutDir)imageformats\</Comman
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link>
       <AdditionalDependencies>Urlmon.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
     <ClCompile>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -271,8 +272,7 @@ xcopy /y $(QTDIR)\plugins\imageformats\qjpeg.dll  $(OutDir)imageformats\</Comman
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Static|x64'">
     <Link>
       <AdditionalDependencies>Urlmon.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <UACExecutionLevel>AsInvoker</UACExecutionLevel>
-      <UACUIAccess>false</UACUIAccess>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
     <ClCompile>
       <LanguageStandard>stdcpp17</LanguageStandard>
