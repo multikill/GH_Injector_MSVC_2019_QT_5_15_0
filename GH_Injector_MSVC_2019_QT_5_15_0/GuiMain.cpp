@@ -313,7 +313,8 @@ void GuiMain::keyPressEvent(QKeyEvent * k)
 
 void GuiMain::dragEnterEvent(QDragEnterEvent* e)
 {
-	printf("dragEnterEvent\n");
+	
+	("dragEnterEvent\n");
 	if (e->mimeData()->hasUrls()) {
 		e->acceptProposedAction();
 	}
@@ -626,8 +627,8 @@ void GuiMain::color_setup()
 void GuiMain::color_change()
 {
 	//idk this check is weird
-	//if (!this->parentWidget())
-	//{
+	if (!this->parentWidget())
+	{
 		if (lightMode)
 		{
 			qApp->setPalette(normalPalette);
@@ -646,7 +647,7 @@ void GuiMain::color_change()
 			pix_banner.loadFromData(getBanner(), getBannerLen(), "JPG");
 			ui.lbl_img->setPixmap(pix_banner);
 		}
-	//}
+	}
 }
 
 void GuiMain::load_banner()

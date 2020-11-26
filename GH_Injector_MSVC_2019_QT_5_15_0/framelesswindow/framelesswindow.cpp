@@ -207,9 +207,6 @@ void FramelessWindow::checkBorderDragging(QMouseEvent *event) {
 			h = sz.height();
 			w = sz.width();
 		}
-
-		return;
-
 		// top right corner
 		if (m_bDragTop && m_bDragRight) {
 			int diff =
@@ -373,9 +370,7 @@ void FramelessWindow::mousePressEvent(QMouseEvent *event) {
 	m_StartGeometry = this->geometry();
 
 	QPoint globalMousePos = mapToGlobal(QPoint(event->x(), event->y()));
-
-	return;
-
+	
 	if (leftBorderHit(globalMousePos) && topBorderHit(globalMousePos)) {
 		m_bDragTop = true;
 		m_bDragLeft = true;

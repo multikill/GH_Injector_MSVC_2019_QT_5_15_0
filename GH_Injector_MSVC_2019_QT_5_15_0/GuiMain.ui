@@ -120,14 +120,14 @@
     <item row="1" column="0" rowspan="2">
      <widget class="QGroupBox" name="grp_settings">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
       <property name="maximumSize">
        <size>
-        <width>500</width>
+        <width>16777215</width>
         <height>16777215</height>
        </size>
       </property>
@@ -137,6 +137,12 @@
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="2" column="3">
         <widget class="QCheckBox" name="cb_auto">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If the injector finds the target process, it automatically injects the checkmarked dll(s).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
@@ -147,6 +153,12 @@
        </item>
        <item row="3" column="3">
         <widget class="QCheckBox" name="cb_close">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The injector automatically closes after injecting the checkmarked dll(s).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
@@ -157,6 +169,12 @@
        </item>
        <item row="0" column="1">
         <widget class="QRadioButton" name="rb_proc">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="maximumSize">
           <size>
            <width>20</width>
@@ -176,6 +194,12 @@
        </item>
        <item row="9" column="3">
         <widget class="QPushButton" name="btn_hooks">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="text">
           <string>Scan for hooks</string>
          </property>
@@ -183,6 +207,12 @@
        </item>
        <item row="0" column="0">
         <widget class="QLabel" name="lbl_proc">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select the target process by it's executable name (not unique).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
@@ -197,7 +227,7 @@
        <item row="3" column="2">
         <widget class="QLineEdit" name="txt_delay">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -230,6 +260,12 @@
          <layout class="QGridLayout" name="gridLayout_3">
           <item row="0" column="0">
            <widget class="QComboBox" name="cmb_peh">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Keep PEH: Doesn't modify the PE header of the dll(s).&lt;/p&gt;&lt;p&gt;Erase PEH: Erases the PE header by wrting 0's to it to avoid detections.3&lt;/p&gt;&lt;p&gt;Fake PEH: Replaces the PE header with the PE header of a normal windows module (eg. kernel32.dll).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
@@ -252,6 +288,12 @@
           </item>
           <item row="1" column="0">
            <widget class="QCheckBox" name="cb_unlink">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Removes the list entry of the dll(s) from the lists in the process enviroment block (not needed for manual mapping).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
@@ -262,6 +304,12 @@
           </item>
           <item row="1" column="1">
            <widget class="QCheckBox" name="cb_copy">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Creates a copy of the dll(s) in the user's temp directory which then get(s) loaded into the target process.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
@@ -272,6 +320,12 @@
           </item>
           <item row="0" column="1">
            <widget class="QCheckBox" name="cb_random">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Renames the dll(s) randomly before injecting it/them.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
@@ -285,6 +339,12 @@
        </item>
        <item row="2" column="0" colspan="2">
         <widget class="QLabel" name="lbl_arch">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The architecture of the currently selected target process.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
@@ -295,6 +355,12 @@
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="lbl_pid">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select the target process by it's identifier (unique but changes when the process restarts).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
@@ -308,6 +374,12 @@
        </item>
        <item row="9" column="0" colspan="3">
         <widget class="QPushButton" name="btn_reset">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="text">
           <string>&amp;Reset settings</string>
          </property>
@@ -315,6 +387,12 @@
        </item>
        <item row="1" column="3">
         <widget class="QPushButton" name="btn_proc">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select a process using the ProcessList™.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
@@ -325,6 +403,12 @@
        </item>
        <item row="1" column="1">
         <widget class="QRadioButton" name="rb_pid">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="maximumSize">
           <size>
            <width>20</width>
@@ -341,6 +425,12 @@
        </item>
        <item row="4" column="0" colspan="4">
         <widget class="QGroupBox" name="grp_method">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="title">
           <string>Method</string>
          </property>
@@ -377,6 +467,12 @@
           </item>
           <item row="0" column="1">
            <widget class="QCheckBox" name="cb_hijack">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Hijacks a handle from another process.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
@@ -431,7 +527,7 @@
           <bool>false</bool>
          </property>
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -455,6 +551,12 @@
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="3" column="1">
            <widget class="QCheckBox" name="cb_protection">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Sets page protections based on section characteristics&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
@@ -468,6 +570,12 @@
           </item>
           <item row="6" column="0">
            <widget class="QCheckBox" name="cb_imports">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Resolves dll imports and builds the IAT&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
@@ -481,6 +589,12 @@
           </item>
           <item row="6" column="1">
            <widget class="QCheckBox" name="cb_tls">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Executes TLS callbacks and initializes static TLS data&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
@@ -494,6 +608,12 @@
           </item>
           <item row="7" column="0">
            <widget class="QCheckBox" name="cb_delay">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Resolves delayed imports on initialization&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
@@ -507,6 +627,12 @@
           </item>
           <item row="7" column="1">
            <widget class="QCheckBox" name="cb_main">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Executes the DllMain&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
@@ -520,6 +646,12 @@
           </item>
           <item row="3" column="0">
            <widget class="QCheckBox" name="cb_clean">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Removes data from the dlls PE header&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
@@ -530,6 +662,12 @@
           </item>
           <item row="4" column="0">
            <widget class="QCheckBox" name="cb_cookie">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Shifts the image by a randomly generated amount of bytes&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
@@ -540,6 +678,12 @@
           </item>
           <item row="4" column="1">
            <widget class="QCheckBox" name="cb_seh">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enables exception handling&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
@@ -560,7 +704,7 @@
           <bool>false</bool>
          </property>
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -575,6 +719,12 @@
        </item>
        <item row="0" column="2" colspan="2">
         <widget class="QComboBox" name="cmb_proc">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="editable">
           <bool>true</bool>
          </property>
@@ -582,6 +732,12 @@
        </item>
        <item row="3" column="0" colspan="2">
         <widget class="QLabel" name="lbl_delay">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Delays the injection (in ms).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
@@ -600,7 +756,7 @@
      <widget class="QGroupBox" name="grp_files">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>1</horstretch>
+        <horstretch>0</horstretch>
         <verstretch>1</verstretch>
        </sizepolicy>
       </property>
@@ -632,6 +788,12 @@
         <widget class="QTreeWidget" name="tree_files">
          <property name="enabled">
           <bool>true</bool>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
          <property name="sizeAdjustPolicy">
           <enum>QAbstractScrollArea::AdjustToContents</enum>

@@ -73,6 +73,13 @@ LRESULT CALLBACK LocalWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 		case WM_PAINT:
 			DrawIcon(g_hWndDC, 0, 0, g_hIcon);
 			break;
+
+		case WM_ACTIVATE:
+			if (wParam == WA_ACTIVE || wParam == WA_CLICKACTIVE)
+			{
+				SetWindowPos(g_hMainWnd, g_hDropWnd, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+			}
+			break;
 	}
 
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);
@@ -140,7 +147,7 @@ LRESULT CALLBACK Proxy_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 			SetEvent(g_hUpdateNow);
 		}
 	}
-	else if (uMsg == WM_ACTIVATE && (HWND)lParam != g_hDropWnd)
+	else if (uMsg == WM_ACTIVATE)
 	{
 		if (wParam == WA_ACTIVE || wParam == WA_CLICKACTIVE)
 		{
@@ -148,12 +155,16 @@ LRESULT CALLBACK Proxy_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 			g_Hide		= false;
 			SetEvent(g_hUpdateNow);
 		}
-		else if (wParam == WA_INACTIVE)
+		else if (wParam == WA_INACTIVE && (HWND)lParam != g_hDropWnd)
 		{
 			g_Active	= false;
 			g_Hide		= false;
 			SetEvent(g_hUpdateNow);
 		}
+	}
+	else if (uMsg == WM_DISPLAYCHANGE)
+	{
+		g_GuiMain->slotReboot();
 	}
 
 	return g_MainWndProc(hWnd, uMsg, wParam, lParam);

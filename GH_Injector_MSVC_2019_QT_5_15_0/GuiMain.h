@@ -43,6 +43,7 @@ public:
 	Ui::GuiMainClass ui;
 
 	void add_file_to_list(QString str, bool active);
+	void slotReboot();
 
 private:
 
@@ -126,7 +127,6 @@ private slots:
 	void auto_inject();
 	void auto_loop_inject();
 	void reset_settings();
-	void slotReboot();
 	void hook_Scan();
 	void btn_hook_scan_change();
 
