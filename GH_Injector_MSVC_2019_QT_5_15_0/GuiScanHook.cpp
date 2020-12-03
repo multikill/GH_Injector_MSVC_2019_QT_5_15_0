@@ -98,9 +98,13 @@ void GuiScanHook::scan_clicked()
 	//tempHookList.push_back( "DLL.Function");
 	//tempHookList.push_back( "DLL2.Function3");
 	int fail = InjLib.ScanHook(m_pid, tempHookList);
-	if (fail == true)
+	if (fail)
 	{
 		setItem({ "Failed" });		
+	}
+	else if (tempHookList.empty())
+	{
+		setItem({ "No hooks found" });
 	}
 	else
 	{
@@ -115,7 +119,7 @@ void GuiScanHook::unhook_clicked()
 	
 	std::vector<std::string> selected = getSelectedItem();
 	int fail = InjLib.RestoreHook(selected);
-	if (fail == true)
+	if (fail)
 	{
 		List.clear();
 		model->setStringList(List);

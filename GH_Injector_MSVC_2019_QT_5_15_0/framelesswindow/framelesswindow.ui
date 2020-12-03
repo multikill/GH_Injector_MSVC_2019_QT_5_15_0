@@ -76,7 +76,7 @@
         <property name="styleSheet">
          <string notr="true">#windowTitlebar{border: 0px none palette(base); border-top-left-radius:5px; border-top-right-radius:5px; background-color:palette(shadow); height:20px;}</string>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,1,0,0,0,0">
+        <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,1,0,0">
          <property name="spacing">
           <number>0</number>
          </property>
@@ -180,52 +180,6 @@
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="restoreButton">
-           <property name="styleSheet">
-            <string notr="true">#restoreButton{
-  background-color:none;
-  border:none;
-  width:16px;
-  height:16px;
-  padding:4px;
-  image:url(:/images/icon_window_restore.png);
-}
-#restoreButton:hover{
-  background-color:palette(alternate-base);
-}
-#restoreButton:pressed{
-  background-color:palette(highlight);
-}</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="maximizeButton">
-           <property name="styleSheet">
-            <string notr="true">#maximizeButton{
-  background-color:none;
-  border:none;
-  width:16px;
-  height:16px;
-  padding:4px;
-  image:url(:/images/icon_window_maximize.png);
-}
-#maximizeButton:hover{
-  background-color:palette(alternate-base);
-}
-##maximizeButton:pressed{
-  background-color:palette(highlight);
-}</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="QToolButton" name="closeButton">
            <property name="font">
             <font>
@@ -246,7 +200,7 @@
 #closeButton:hover{
   background-color:palette(alternate-base);
 }
-##closeButton:pressed{
+#closeButton:pressed{
   background-color:palette(highlight);
 }</string>
            </property>

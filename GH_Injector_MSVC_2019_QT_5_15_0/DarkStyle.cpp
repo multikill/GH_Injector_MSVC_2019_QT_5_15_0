@@ -29,8 +29,7 @@ void DarkStyle::polish(QPalette &palette) {
   // modify palette to dark
   palette.setColor(QPalette::Window, QColor(0x2D, 0x2D, 0x2D));
   palette.setColor(QPalette::WindowText, Qt::white);
-  palette.setColor(QPalette::Disabled, QPalette::WindowText,
-                   QColor(127, 127, 127));
+  palette.setColor(QPalette::Disabled, QPalette::WindowText, QColor(127, 127, 127));
   palette.setColor(QPalette::Base, QColor(35, 35, 35));
   palette.setColor(QPalette::AlternateBase, QColor(53, 53, 53));
   palette.setColor(QPalette::ToolTipBase, Qt::white);
@@ -41,8 +40,7 @@ void DarkStyle::polish(QPalette &palette) {
   palette.setColor(QPalette::Shadow, QColor(20, 20, 20));
   palette.setColor(QPalette::Button, QColor(53, 53, 53));
   palette.setColor(QPalette::ButtonText, Qt::white);
-  palette.setColor(QPalette::Disabled, QPalette::ButtonText,
-                   QColor(127, 127, 127));
+  palette.setColor(QPalette::Disabled, QPalette::ButtonText, QColor(127, 127, 127));
   palette.setColor(QPalette::BrightText, Qt::red);
   palette.setColor(QPalette::Link, QColor(42, 130, 218));
   palette.setColor(QPalette::Highlight, QColor(42, 130, 218));
@@ -59,7 +57,7 @@ void DarkStyle::polish(QApplication *app) {
   // setPointSize was reduced from +2 because when applied this way in Qt5, the
   // font is larger than intended for some reason
   QFont defaultFont = QApplication::font();
-  defaultFont.setPointSize(defaultFont.pointSize() + 1);
+  defaultFont.setPointSize(11); //defaultFont.pointSize() + 1
   app->setFont(defaultFont);
 
   // loadstylesheet

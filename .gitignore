@@ -355,3 +355,4 @@ healthchecksdb
 /Out2/setup_dynamic.ps1
 /Out2/QT_GH_Injector_Static/GH_Inj_Log.txt
 /Out2/setup_static.ps1
+GH_Inj_Log.txt

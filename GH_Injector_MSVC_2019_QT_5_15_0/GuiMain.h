@@ -7,6 +7,8 @@
 #include <qtreewidget.h>
 #include <qevent.h>
 
+#include <thread>
+
 
 #include "framelesswindow/framelesswindow.h"
 #include "ui_GuiMain.h"
@@ -38,11 +40,13 @@ public:
 
 	static int str_to_arch(const QString str);
 	static QString arch_to_str(const int arch);
+	Ui::GuiMainClass ui;
 
-	void setFramless(FramelessWindow* me);
+	void add_file_to_list(QString str, bool active);
+	void slotReboot();
 
 private:
-	Ui::GuiMainClass ui;
+
 	FramelessWindow framelessPicker;
 	FramelessWindow framelessScanner;
 	GuiProcess* gui_Picker = NULL;
@@ -70,7 +74,12 @@ private:
 	bool		lightMode;
 	bool		lbl_hide_banner;
 	UPDATE		update;
+	bool		onReset;
+	bool		onUserInput;
 
+	std::thread process_update_thread;
+	bool OnExit;
+	
 	QTimer* t_Auto_Inj;
 	QTimer* t_Delay_Inj;
 
@@ -79,12 +88,19 @@ private:
 	InjectionLib InjLib;
 
 	std::string getVersionFromIE();
+
+	void keyPressEvent(QKeyEvent * k);
+	void UpdateProcess(int Interval = 100);
 	
 protected:
 	void dragEnterEvent(QDragEnterEvent* e);
 	void dragMoveEvent(QDragMoveEvent* e);
 	void dragLeaveEvent(QDragLeaveEvent* e);
-	void dropEvent(QDropEvent* e);
+	//void dropEvent(QDropEvent* e); 
+	
+	bool eventFilter(QObject *obj, QEvent *event) override;
+	
+	void toggleSelected();
 
 public slots:
 	void get_from_picker(Process_State_Struct* procStateStruct, Process_Struct* procStruct);
@@ -111,7 +127,6 @@ private slots:
 	void auto_inject();
 	void auto_loop_inject();
 	void reset_settings();
-	void slotReboot();
 	void hook_Scan();
 	void btn_hook_scan_change();
 
@@ -130,7 +145,6 @@ private slots:
 
 	// Files
 	void add_file_dialog();
-	void add_file_to_list(QString str, QString active);
 	void remove_file();
 	void select_file();
 	void delay_inject();
