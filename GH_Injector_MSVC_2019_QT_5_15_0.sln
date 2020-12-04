@@ -4,6 +4,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GH_Injector_MSVC_2019_QT_5_15_0", "GH_Injector_MSVC_2019_QT_5_15_0\GH_Injector_MSVC_2019_QT_5_15_0.vcxproj", "{6D2B70ED-A9AA-4587-9ABF-305DDAB2B233}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AC732425-E265-40FF-842F-C59CECE9A96C} = {AC732425-E265-40FF-842F-C59CECE9A96C}
+		{6F0A0AA5-4B61-4323-B9A5-B3EF0088DC1B} = {6F0A0AA5-4B61-4323-B9A5-B3EF0088DC1B}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GH Injector Library", "GH-Injector-Library\GH Injector Library\GH Injector Library.vcxproj", "{AC732425-E265-40FF-842F-C59CECE9A96C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GH Injector SM", "GH-Injector-Library\GH Injector SM\GH Injector SM\GH Injector SM.vcxproj", "{6F0A0AA5-4B61-4323-B9A5-B3EF0088DC1B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +34,30 @@ Global
 		{6D2B70ED-A9AA-4587-9ABF-305DDAB2B233}.Static|x64.ActiveCfg = Static|x64
 		{6D2B70ED-A9AA-4587-9ABF-305DDAB2B233}.Static|x64.Build.0 = Static|x64
 		{6D2B70ED-A9AA-4587-9ABF-305DDAB2B233}.Static|x86.ActiveCfg = Static|x64
+		{AC732425-E265-40FF-842F-C59CECE9A96C}.Debug|x64.ActiveCfg = Debug|x64
+		{AC732425-E265-40FF-842F-C59CECE9A96C}.Debug|x64.Build.0 = Debug|x64
+		{AC732425-E265-40FF-842F-C59CECE9A96C}.Debug|x86.ActiveCfg = Debug|Win32
+		{AC732425-E265-40FF-842F-C59CECE9A96C}.Debug|x86.Build.0 = Debug|Win32
+		{AC732425-E265-40FF-842F-C59CECE9A96C}.Release|x64.ActiveCfg = Release|x64
+		{AC732425-E265-40FF-842F-C59CECE9A96C}.Release|x64.Build.0 = Release|x64
+		{AC732425-E265-40FF-842F-C59CECE9A96C}.Release|x86.ActiveCfg = Release|Win32
+		{AC732425-E265-40FF-842F-C59CECE9A96C}.Release|x86.Build.0 = Release|Win32
+		{AC732425-E265-40FF-842F-C59CECE9A96C}.Static|x64.ActiveCfg = Release|x64
+		{AC732425-E265-40FF-842F-C59CECE9A96C}.Static|x64.Build.0 = Release|x64
+		{AC732425-E265-40FF-842F-C59CECE9A96C}.Static|x86.ActiveCfg = Release|Win32
+		{AC732425-E265-40FF-842F-C59CECE9A96C}.Static|x86.Build.0 = Release|Win32
+		{6F0A0AA5-4B61-4323-B9A5-B3EF0088DC1B}.Debug|x64.ActiveCfg = Debug|x64
+		{6F0A0AA5-4B61-4323-B9A5-B3EF0088DC1B}.Debug|x64.Build.0 = Debug|x64
+		{6F0A0AA5-4B61-4323-B9A5-B3EF0088DC1B}.Debug|x86.ActiveCfg = Debug|Win32
+		{6F0A0AA5-4B61-4323-B9A5-B3EF0088DC1B}.Debug|x86.Build.0 = Debug|Win32
+		{6F0A0AA5-4B61-4323-B9A5-B3EF0088DC1B}.Release|x64.ActiveCfg = Release|x64
+		{6F0A0AA5-4B61-4323-B9A5-B3EF0088DC1B}.Release|x64.Build.0 = Release|x64
+		{6F0A0AA5-4B61-4323-B9A5-B3EF0088DC1B}.Release|x86.ActiveCfg = Release|Win32
+		{6F0A0AA5-4B61-4323-B9A5-B3EF0088DC1B}.Release|x86.Build.0 = Release|Win32
+		{6F0A0AA5-4B61-4323-B9A5-B3EF0088DC1B}.Static|x64.ActiveCfg = Release|x64
+		{6F0A0AA5-4B61-4323-B9A5-B3EF0088DC1B}.Static|x64.Build.0 = Release|x64
+		{6F0A0AA5-4B61-4323-B9A5-B3EF0088DC1B}.Static|x86.ActiveCfg = Release|Win32
+		{6F0A0AA5-4B61-4323-B9A5-B3EF0088DC1B}.Static|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
