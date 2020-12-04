@@ -1,0 +1,3 @@
+[submodule "GH-Injector-Library"]
+	path = GH-Injector-Library
+	url = https://github.com/Broihon/GH-Injector-Library
